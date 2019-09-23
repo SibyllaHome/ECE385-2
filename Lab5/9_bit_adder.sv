@@ -1,4 +1,4 @@
-module 9_bit_adder_subtractor(
+module nine_bit_adder_subtractor(
 										input   logic[7:0]     A,
 										input   logic[7:0]     B,
 										input	  logic 			  fn,	// Sub: fn = 1 <--> Add: fn = 0

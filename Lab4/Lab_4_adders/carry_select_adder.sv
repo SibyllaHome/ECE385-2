@@ -23,9 +23,9 @@ endmodule
 
 
 module four_bit_sa(
-						input [3:0] x,
-						input [3:0] y,
-						input cin,
+						input logic [3:0] x,
+						input logic [3:0] y,
+						input logic cin,
 						output logic [3:0] s,
 						output logic cout
 						);
@@ -36,8 +36,8 @@ module four_bit_sa(
 	logic [3:0] s0;
 	logic [3:0] s1;
 	
-	four_bit_ra FRA0(.x(x[3 : 0]), .y(y[3 : 0]), .cin(0), .s(s0[3 : 0]), .cout(c0));
-	four_bit_ra FRA1(.x(x[3 : 0]), .y(y[3 : 0]), .cin(1), .s(s1[3 : 0]), .cout(c1));
+	four_bit_ra FRA0(.x(x[3 : 0]), .y(y[3 : 0]), .cin(1'b0), .s(s0[3 : 0]), .cout(c0));
+	four_bit_ra FRA1(.x(x[3 : 0]), .y(y[3 : 0]), .cin(1'b1), .s(s1[3 : 0]), .cout(c1));
 	
 	always_comb
 	begin

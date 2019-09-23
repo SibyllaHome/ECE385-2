@@ -51,7 +51,7 @@ module full_adder(
 						);
 						
 	assign s    = x ^ y ^ cin;
-	assign cout = (x&y) | (x&cin) | (cin&x);
+	assign cout = (x&y) | (x&cin) | (cin&y);
 	
 endmodule
 

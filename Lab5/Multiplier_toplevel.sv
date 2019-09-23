@@ -33,7 +33,9 @@ module multiplier_toplevel
     logic[6:0]      AhexL_comb;
     logic[6:0]      BhexU_comb;
     logic[6:0]      BhexL_comb;
-    
+	 logic			  A_Shift_Out;	//temporary variable hold the shift out value from A
+	 logic			  Q_;				//Represent for Q -1 (Shift out from B)
+	 
     /* Behavior of registers A, B, X */
     always_ff @(posedge Clk) begin
         
@@ -80,13 +82,42 @@ module multiplier_toplevel
      * in the same way that you'd place a 74-series hex driver chip on your protoboard 
      * Make sure only *one* adder module (out of the three types) is instantiated*/
 	  
-      ripple_adder ripple_adder_inst
-      (
-          .A,             // This is shorthand for .A(A) when both wires/registers have the same name
-          .B,
-          .Sum(Sum_comb), // Connects the Sum_comb wire in this file to the Sum wire in ripple_adder.sv
-          .CO(CO_comb)
-      );
+	 // instantiate modules here //////////////////////////////////////////////////////////////
+		shift_reg8 regA(
+							 .Clk(Clk),
+							 .Reset(ClearA_LoadB), 
+							 .Shift_In(X_comb), 
+							 .Load(), 			//input from control unit
+							 .Shift_En(), 		//input from control unit
+							 .D(A[7:0]),		//Data in from Adder_Subtractor
+							 .Shift_Out(A_Shift_Out),
+							 .Data_Out()); 	//8 - bit A value in register here!!
+
+		Shift_reg8 regB(
+							 .Clk(Clk),
+							 .Reset(1'b0),
+							 .Shift_In(A_Shift_Out),
+							 .Load(),			//input from control unit
+							 .Shift_En(),		//input from control unit
+							 .D(S[7:0]),
+							 .Shift_Out(Q_),
+							 .Data_Out());		//8 - bit B value in register here!!
+							 
+		nine_bit_adder_subtractor ADD_SUB(
+													 .A(A[7:0]),
+													 .B(S[7:0]),
+													 .fn(),			//input from control unit to decide whether + or -
+													 .Sum(A[7:0]));
+
+
+	 //////////////////////////////////////////////////////////////////////////////////////////
+    ripple_adder ripple_adder_inst
+    (
+        .A,             // This is shorthand for .A(A) when both wires/registers have the same name
+        .B,
+        .Sum(Sum_comb), // Connects the Sum_comb wire in this file to the Sum wire in ripple_adder.sv
+        .CO(CO_comb)
+    );
     
     HexDriver AhexL_inst
     (

@@ -52,7 +52,7 @@ module control(
 		
 			ST, EN:
 			begin
-				load = Clear_LoadB;
+				load = ClearA_LoadB;
 				shift = 1'b0;
 				add = 1'b0;
 				sub = 1'b0;

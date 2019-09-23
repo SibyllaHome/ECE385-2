@@ -45,6 +45,7 @@ module multiplier_toplevel
         end else if (!ClearA_LoadB) begin
             // If LoadB is pressed, copy switches to register B
             B <= S;
+				A <= 8'h0000;
         end
         
         // transfer A,B and X from multiplier to output register

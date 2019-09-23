@@ -1,9 +1,9 @@
 module control(
-					input logic Clk, Reset, ClearA_LoadB, Run, M, B,
+					input logic Clk, Reset, ClearA_LoadB, Run, M, MP  //M = B[0], MP = Q-1
 					output logic load, shift, add, sub
 					);
 	
-	enum logic [4:0] {A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,ST,EN} curr_state, next_state;
+	enum logic [4:0] {A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,ST,EN} curr_state, next_state;  //ST start, EN end
 	
 	
 	always_ff @ (posedge Clk)
@@ -62,12 +62,12 @@ module control(
 			begin
 				load = 1'b0;
 				shift = 1'b0;
-				if (B == M)
+				if (MP == M)
 				begin
 					add = 1'b0;
 					sub = 1'b0;
 				end 
-				else if(B)
+				else if(M)
 				begin
 					add = 1'b0;
 					sub = 1'b1;

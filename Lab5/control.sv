@@ -52,41 +52,50 @@ module control(
 		
 			ST, EN:
 			begin
-				load = ClearA_LoadB;
+				load 	= ClearA_LoadB;
 				shift = 1'b0;
-				add = 1'b0;
-				sub = 1'b0;
+				add 	= 1'b0;
+				sub 	= 1'b0;
 			end
 			
+			//add or sub or do nothing
 			A,B,C,D,E,F,G,H:
 			begin
-				load = 1'b0;
+				load 	= 1'b0;
 				shift = 1'b0;
 				if (MP == M)
 				begin
 					add = 1'b0;
 					sub = 1'b0;
 				end 
-				else if(M)
+				else if(M == 1 && MP == 0)
 				begin
 					add = 1'b0;
 					sub = 1'b1;
 				end
-				else 
+				else
 				begin
 					add = 1'b1;
 					sub = 1'b0;
 				end
 			end
 			
+			//shift
 			AS,BS,CS,DS,ES,FS,GS,HS:
 			begin
-				load = 1'b0;
+				load 	= 1'b0;
 				shift = 1'b1;
-				add = 1'b0;
-				sub = 1'b0;
+				add 	= 1'b0;
+				sub 	= 1'b0;
 			end
-		
+			
+			default:
+			begin
+				load  = ClearA_LoadB;
+				shift = 1'b0;
+				add 	= 1'b0;
+				sub 	= 1'b0;
+			end
 		endcase
 	end
 	

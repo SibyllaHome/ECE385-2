@@ -1,5 +1,5 @@
 Analysis & Elaboration report for ECE385_LAB_5
-Mon Sep 23 23:22:07 2019
+Tue Sep 24 02:17:47 2019
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -37,7 +37,7 @@ refer to the applicable agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Elaboration Summary                                                   ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Elaboration Status      ; Successful - Mon Sep 23 23:22:07 2019       ;
+; Analysis & Elaboration Status      ; Successful - Tue Sep 24 02:17:47 2019       ;
 ; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                      ; ECE385_LAB_5                                ;
 ; Top-level Entity Name              ; Multiplier_toplevel                         ;
@@ -171,7 +171,7 @@ refer to the applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Elaboration
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Mon Sep 23 23:21:58 2019
+    Info: Processing started: Tue Sep 24 02:17:39 2019
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5 --analysis_and_elaboration
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
@@ -202,9 +202,9 @@ Info (12128): Elaborating entity "full_adder" for hierarchy "nine_bit_adder_subt
 Info (12128): Elaborating entity "control" for hierarchy "control:control_unit" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 172
 Info (12128): Elaborating entity "HexDriver" for hierarchy "HexDriver:AhexL_inst" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 181
 Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 4717 megabytes
-    Info: Processing ended: Mon Sep 23 23:22:07 2019
-    Info: Elapsed time: 00:00:09
+    Info: Peak virtual memory: 4715 megabytes
+    Info: Processing ended: Tue Sep 24 02:17:47 2019
+    Info: Elapsed time: 00:00:08
     Info: Total CPU time (on all processors): 00:00:19
 
 

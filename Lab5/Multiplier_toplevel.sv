@@ -5,7 +5,7 @@ module Multiplier_toplevel
 (
     input   logic           Clk,         // 50MHz clock is only used to get timing estimate data
     input   logic           Reset,       // From push-button 0.  Remember the button is active low (0 when pressed)
-    input   logic           ClearA_LoadB,// From push-button 1
+    input   logic           ClearA_LoadB,// From push-button 2.
     input   logic           Run,         // From push-button 3.
     input   logic[7:0]      S,           // From slider switches
     

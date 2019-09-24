@@ -1,7 +1,7 @@
 /* Module declaration.  Everything within the parentheses()
  * is a port between this module and the outside world */
  
-module Multiplier_toplevel
+module multiplier_toplevel
 (
     input   logic           Clk,         // 50MHz clock is only used to get timing estimate data
     input   logic           Reset,       // From push-button 0.  Remember the button is active low (0 when pressed)
@@ -101,18 +101,19 @@ module Multiplier_toplevel
      * Each time you instantate an "object", you consume physical hardware on the FPGA
      * in the same way that you'd place a 74-series hex driver chip on your protoboard 
      * Make sure only *one* adder module (out of the three types) is instantiated*/
+	  assign X = XA[8];
 	  assign Aval = A;
 	  assign Bval = B;
 	 //instantiate modules here
 		/***************************************************************************************************/
-		DFlip 		  bitX(
+		DFF		  BitM(
 					 //input
 							 .Clk(Clk),
-							 .load(add_EN | sub_EN),
+							 .load(shift),
 							 .reset(ClearA_LoadB | Reset),
-							 .B(XA[8]),
+							 .B(Q_),
 					 //output
-							 .D(X));
+							 .D(Q));
 							 
 		/****************************************************************************************************/					 
 		shift_reg8 regA(
@@ -143,7 +144,7 @@ module Multiplier_toplevel
 		DFlip			Qminus(
 					//input
 							.Clk(Clk),
-							.load(shift),
+							.load(add_EN | sub_EN),
 							.reset(ClearA_LoadB | Reset),
 							.B(Q_),
 					//output

@@ -1,7 +1,7 @@
-Analysis & Synthesis Status : Failed - Mon Sep 23 13:36:32 2019
+Analysis & Synthesis Status : Failed - Mon Sep 23 21:47:29 2019
 Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 Revision Name : ECE385_LAB_5
-Top-level Entity Name : ECE385_LAB_5
+Top-level Entity Name : Multiplier_toplevel
 Family : Cyclone IV E
 Total logic elements : N/A until Partition Merge
     Total combinational functions : N/A until Partition Merge

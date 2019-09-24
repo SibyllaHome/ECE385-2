@@ -1,5 +1,5 @@
 module control(
-					input logic Clk, Reset, ClearA_LoadB, Run, M, MP  //M = B[0], MP = Q-1
+					input logic Clk, Reset, ClearA_LoadB, Run, M, MP,  //M = B[0], MP = Q-1
 					output logic load, shift, add, sub
 					);
 	

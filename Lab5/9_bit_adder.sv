@@ -7,13 +7,15 @@ module nine_bit_adder_subtractor(
 
 
 logic c0,c1;
-logic B_final = (B ^ {8{fn}});
+logic[7:0] B_final;
+
+assign B_final = (B ^ {8{fn}});
 
 four_bit_ra f0(.x(A[3:0]), .y(B_final[3:0]), .cin(fn), .s(Sum[3:0]), .cout(c0));
 four_bit_ra f1(.x(A[7:4]), .y(B_final[7:4]), .cin(c0), .s(Sum[7:4]), .cout(c1));
-full_adder 	f2(.x(A[7], 	.y(B_final[7]),	.cin(c1), .s(Sum[8]),	.cout()	);
+full_adder 	f2(.x(A[7]  ), .y(B_final[7]),	.cin(c1), .s(Sum[8]),	.cout()	);
 
-assign Sum[8] = A[8];
+//assign Sum[8] = A[8];
 
 
 endmodule

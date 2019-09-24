@@ -1,4 +1,4 @@
-module DFF (input logic Clk, load, reset, B,
+module DFlip (input logic Clk, load, reset, B,
 				output logic D);
 				
 				always_ff @ (posedge Clk)

@@ -1,0 +1,1 @@
+Info (10281): Verilog HDL Declaration information at shift_reg_8.sv(4): object "Data_Out" differs only in case from object "Data_out" in the same scope File: C:/Apps/Github/ECE385/Lab5/shift_reg_8.sv Line: 4

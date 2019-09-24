@@ -1,14 +1,14 @@
-Analysis & Elaboration Status : Successful - Mon Sep 23 23:22:07 2019
+Analysis & Synthesis Status : Successful - Tue Sep 24 00:28:09 2019
 Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 Revision Name : ECE385_LAB_5
 Top-level Entity Name : Multiplier_toplevel
 Family : Cyclone IV E
-Total logic elements : N/A until Partition Merge
-    Total combinational functions : N/A until Partition Merge
-    Dedicated logic registers : N/A until Partition Merge
-Total registers : N/A until Partition Merge
-Total pins : N/A until Partition Merge
-Total virtual pins : N/A until Partition Merge
-Total memory bits : N/A until Partition Merge
-Embedded Multiplier 9-bit elements : N/A until Partition Merge
-Total PLLs : N/A until Partition Merge
+Total logic elements : 98
+    Total combinational functions : 98
+    Dedicated logic registers : 39
+Total registers : 39
+Total pins : 57
+Total virtual pins : 0
+Total memory bits : 0
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0

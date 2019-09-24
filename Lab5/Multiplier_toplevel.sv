@@ -29,17 +29,16 @@ module Multiplier_toplevel
 //    logic[7:0]      Aval_comb;
 //	   logic[7:0]      Bval_comb;
 //    logic           X_comb;
-	 logic			  Q_,Q;				//Represent for Q -1 (Shift out from B)
 //    logic[6:0]      AhexU_comb;
 //    logic[6:0]      AhexL_comb;
 //    logic[6:0]      BhexU_comb;
 //    logic[6:0]      BhexL_comb;
-	 logic			  shift;			//indicating SHIFT starts
-	 logic			  load_B;		//signal indicating load B and also clear A
-	 logic			  A_Shift_Out;	//temporary variable hold the shift out value from A
+	 logic			  Q_,Q;					//Represent for Q -1 (Shift out from B)
+	 logic			  shift;					//indicating SHIFT starts
+	 logic			  load_B;				//signal indicating load B and also clear A
+	 logic			  A_Shift_Out;			//temporary variable hold the shift out value from A
 	 logic 			  add_EN, sub_EN;		//Add / Sub Enable, depends on control unit
-//	 logic			  reg_load;		//load data into register (2 DFF & 1 shift_reg)
-	 logic[8:0]      XA;
+	 logic[8:0]      XA;						//X + [7:0]A
     /* Behavior of registers A, B, X */
 //    always_ff @(posedge Clk) begin
 //        
@@ -105,11 +104,11 @@ module Multiplier_toplevel
 	  assign Bval = B;
 	 //instantiate modules here
 		/***************************************************************************************************/
-		DFlip 		  bitX(
+		DFlip 		bitX(
 					 //input
 							 .Clk(Clk),
 							 .load(add_EN | sub_EN),
-							 .reset(ClearA_LoadB | Reset),
+							 .reset(load_B | Reset),
 							 .B(XA[8]),
 					 //output
 							 .D(X));
@@ -118,9 +117,9 @@ module Multiplier_toplevel
 		shift_reg8 regA(
 					 //input
 							 .Clk(Clk),
-							 .Reset(load_B | ClearA_LoadB), 
+							 .Reset(load_B | Reset), 
 							 .Shift_In(X), 
-							 .Load(add_EN | sub_EN),						//input from control unit, whenever add/sub is over, load A
+							 .Load(add_EN | sub_EN),			//input from control unit, whenever add/sub is over, load A
 							 .Shift_En(shift), 					//input from control unit
 							 .D(XA[7:0]),							//Data in from Adder_Subtractor
 					 //output
@@ -132,12 +131,12 @@ module Multiplier_toplevel
 							 .Clk(Clk),
 							 .Reset(Reset),
 							 .Shift_In(A_Shift_Out),
-							 .Load(loadB),						//input from control unit
-							 .Shift_En(shift),					//input from control unit
-							 .D(S),				//concatenate 					*?*
+							 .Load(load_B),						//input from control unit
+							 .Shift_En(shift),				//input from control unit
+							 .D(S),								//concatenate 					
 					 //output
 							 .Shift_Out(Q_),
-							 .Data_Out(B));							//8 - bit B value in register here!!
+							 .Data_Out(B));					//8 - bit B value in register here!!
 							 
 		/*****************************************************************************************************/					 
 		DFlip			Qminus(
@@ -152,8 +151,8 @@ module Multiplier_toplevel
 		/****************************************************************************************************/					 
 		nine_bit_adder_subtractor ADD_SUB(
 											 //input
-													 .A(A[7:0]),
-													 .B(S[7:0]),
+													 .A(A),
+													 .B(S),
 													 .fn(sub_EN),		//input from control unit to decide whether + or -
 											 //output
 													 .Sum(XA));
@@ -170,8 +169,7 @@ module Multiplier_toplevel
 									.load(load_B),
 									.shift(shift),
 									.add(add_EN),
-									.sub(sub_EN)
-									);
+									.sub(sub_EN));
 
 	 /////////////////////////////////////////////////////////////////////////////////////////////////
 

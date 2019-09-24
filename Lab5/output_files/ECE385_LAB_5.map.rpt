@@ -1,5 +1,5 @@
-Analysis & Synthesis report for ECE385_LAB_5
-Mon Sep 23 22:24:00 2019
+Analysis & Elaboration report for ECE385_LAB_5
+Mon Sep 23 23:22:07 2019
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -7,10 +7,11 @@ Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 ; Table of Contents ;
 ---------------------
   1. Legal Notice
-  2. Analysis & Synthesis Summary
-  3. Analysis & Synthesis Settings
-  4. Parallel Compilation
-  5. Analysis & Synthesis Messages
+  2. Analysis & Elaboration Summary
+  3. Parallel Compilation
+  4. Analysis & Elaboration Settings
+  5. Port Connectivity Checks: "nine_bit_adder_subtractor:ADD_SUB|full_adder:f2"
+  6. Analysis & Elaboration Messages
 
 
 
@@ -34,9 +35,9 @@ refer to the applicable agreement for further details.
 
 
 +----------------------------------------------------------------------------------+
-; Analysis & Synthesis Summary                                                     ;
+; Analysis & Elaboration Summary                                                   ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Failed - Mon Sep 23 22:24:00 2019           ;
+; Analysis & Elaboration Status      ; Successful - Mon Sep 23 23:22:07 2019       ;
 ; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                      ; ECE385_LAB_5                                ;
 ; Top-level Entity Name              ; Multiplier_toplevel                         ;
@@ -53,8 +54,24 @@ refer to the applicable agreement for further details.
 +------------------------------------+---------------------------------------------+
 
 
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 12          ;
+; Maximum allowed            ; 6           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
++----------------------------+-------------+
+
+
 +-------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Settings                                                                               ;
+; Analysis & Elaboration Settings                                                                             ;
 +------------------------------------------------------------------+---------------------+--------------------+
 ; Option                                                           ; Setting             ; Default Value      ;
 +------------------------------------------------------------------+---------------------+--------------------+
@@ -139,58 +156,55 @@ refer to the applicable agreement for further details.
 +------------------------------------------------------------------+---------------------+--------------------+
 
 
-+------------------------------------------+
-; Parallel Compilation                     ;
-+----------------------------+-------------+
-; Processors                 ; Number      ;
-+----------------------------+-------------+
-; Number detected on machine ; 12          ;
-; Maximum allowed            ; 6           ;
-;                            ;             ;
-; Average used               ; 1.00        ;
-; Maximum used               ; 1           ;
-;                            ;             ;
-; Usage by Processor         ; % Time Used ;
-;     Processor 1            ; 100.0%      ;
-+----------------------------+-------------+
++-----------------------------------------------------------------------------+
+; Port Connectivity Checks: "nine_bit_adder_subtractor:ADD_SUB|full_adder:f2" ;
++------+--------+----------+--------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                          ;
++------+--------+----------+--------------------------------------------------+
+; cout ; Output ; Info     ; Explicitly unconnected                           ;
++------+--------+----------+--------------------------------------------------+
 
 
-+-------------------------------+
-; Analysis & Synthesis Messages ;
-+-------------------------------+
++---------------------------------+
+; Analysis & Elaboration Messages ;
++---------------------------------+
 Info: *******************************************************************
-Info: Running Quartus Prime Analysis & Synthesis
+Info: Running Quartus Prime Analysis & Elaboration
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Mon Sep 23 22:23:51 2019
-Info: Command: quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
+    Info: Processing started: Mon Sep 23 23:21:58 2019
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5 --analysis_and_elaboration
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
 Info (12021): Found 1 design units, including 1 entities, in source file multiplier_toplevel.sv
-    Info (12023): Found entity 1: Multiplier_toplevel File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 4
+    Info (12023): Found entity 1: Multiplier_toplevel File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 4
 Info (12021): Found 1 design units, including 1 entities, in source file control.sv
-    Info (12023): Found entity 1: control File: C:/Apps/Github/ECE385/Lab5/control.sv Line: 1
+    Info (12023): Found entity 1: control File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/control.sv Line: 1
 Info (12021): Found 3 design units, including 3 entities, in source file 9_bit_adder.sv
-    Info (12023): Found entity 1: nine_bit_adder_subtractor File: C:/Apps/Github/ECE385/Lab5/9_bit_adder.sv Line: 1
-    Info (12023): Found entity 2: four_bit_ra File: C:/Apps/Github/ECE385/Lab5/9_bit_adder.sv Line: 26
-    Info (12023): Found entity 3: full_adder File: C:/Apps/Github/ECE385/Lab5/9_bit_adder.sv Line: 43
+    Info (12023): Found entity 1: nine_bit_adder_subtractor File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 1
+    Info (12023): Found entity 2: four_bit_ra File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 26
+    Info (12023): Found entity 3: full_adder File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 43
 Info (12021): Found 1 design units, including 1 entities, in source file shift_reg_8.sv
-    Info (12023): Found entity 1: shift_reg8 File: C:/Apps/Github/ECE385/Lab5/shift_reg_8.sv Line: 1
+    Info (12023): Found entity 1: shift_reg8 File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/shift_reg_8.sv Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file dflipflop.sv
-    Info (12023): Found entity 1: DFlip File: C:/Apps/Github/ECE385/Lab5/Dflipflop.sv Line: 1
+    Info (12023): Found entity 1: DFlip File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Dflipflop.sv Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file hexdriver.sv
-    Info (12023): Found entity 1: HexDriver File: C:/Apps/Github/ECE385/Lab5/HexDriver.sv Line: 1
+    Info (12023): Found entity 1: HexDriver File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/HexDriver.sv Line: 1
 Info (12021): Found 3 design units, including 3 entities, in source file synchronizers.sv
-    Info (12023): Found entity 1: sync File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 4
-    Info (12023): Found entity 2: sync_r0 File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 18
-    Info (12023): Found entity 3: sync_r1 File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 39
-Warning (10236): Verilog HDL Implicit Net warning at Multiplier_toplevel.sv(135): created implicit net for "loadB" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 135
-Error (10161): Verilog HDL error at Multiplier_toplevel.sv(60): object "Aval_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 60
-Error (10161): Verilog HDL error at Multiplier_toplevel.sv(61): object "Bval_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 61
-Error (10161): Verilog HDL error at Multiplier_toplevel.sv(62): object "X_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 62
-Error: Quartus Prime Analysis & Synthesis was unsuccessful. 3 errors, 2 warnings
-    Error: Peak virtual memory: 4730 megabytes
-    Error: Processing ended: Mon Sep 23 22:24:00 2019
-    Error: Elapsed time: 00:00:09
-    Error: Total CPU time (on all processors): 00:00:19
+    Info (12023): Found entity 1: sync File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Synchronizers.sv Line: 4
+    Info (12023): Found entity 2: sync_r0 File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Synchronizers.sv Line: 18
+    Info (12023): Found entity 3: sync_r1 File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Synchronizers.sv Line: 39
+Info (12127): Elaborating entity "Multiplier_toplevel" for the top level hierarchy
+Info (12128): Elaborating entity "DFlip" for hierarchy "DFlip:bitX" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 114
+Info (12128): Elaborating entity "shift_reg8" for hierarchy "shift_reg8:regA" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 127
+Info (12128): Elaborating entity "nine_bit_adder_subtractor" for hierarchy "nine_bit_adder_subtractor:ADD_SUB" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 158
+Info (12128): Elaborating entity "four_bit_ra" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 14
+Info (12128): Elaborating entity "full_adder" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0|full_adder:fa0" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 36
+Info (12128): Elaborating entity "control" for hierarchy "control:control_unit" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 172
+Info (12128): Elaborating entity "HexDriver" for hierarchy "HexDriver:AhexL_inst" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 181
+Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 4717 megabytes
+    Info: Processing ended: Mon Sep 23 23:22:07 2019
+    Info: Elapsed time: 00:00:09
+    Info: Total CPU time (on all processors): 00:00:19
 
 

@@ -29,12 +29,16 @@ module multiplier_toplevel
     logic[7:0]      Aval_comb;
 	 logic[7:0]      Bval_comb;
     logic           X_comb;
+	 logic			  Q_;				//Represent for Q -1 (Shift out from B)
     logic[6:0]      AhexU_comb;
     logic[6:0]      AhexL_comb;
     logic[6:0]      BhexU_comb;
     logic[6:0]      BhexL_comb;
+	 logic			  shift;			//indicating SHIFT starts
+	 logic			  load_B;		//signal indicating load B and also clear A
 	 logic			  A_Shift_Out;	//temporary variable hold the shift out value from A
-	 logic			  Q_;				//Represent for Q -1 (Shift out from B)
+	 logic 			  add_EN, sub_EN, fn;		//Add / Sub Enable, depends on control unit
+	 logic			  reg_load;		//load data into register (2 DFF & 1 shift_reg)
 	 
     /* Behavior of registers A, B, X */
     always_ff @(posedge Clk) begin
@@ -57,10 +61,21 @@ module multiplier_toplevel
             Bval <= Bval_comb;
 				X    <= X_comb;
         end
-            // else, Aval, Bval and X maintain their previous values
-        
+            // else, Aval, Bval and X maintain their previous values  
     end
-    
+	 
+    //determine signal for load register//////////////////////////////////////////////////////
+	 reg_load = add_EN | sub_EN;			 //whenever add / sub is operated
+	 
+	 //determine whether Add or Sub////////////////////////////////////////////////////////////
+	 if(add_EN == 1'b1)begin
+	 fn = 1'b0;							//fn = 0, operate Add
+	 end
+	 else if(sub_EN == 1'b1)begin
+	 fn = 1'b1;							//fn = 1, operate Sub
+	 end
+	 //////////////////////////////////////////////////////////////////////////////////////////
+	 
     /* Decoders for HEX drivers and output registers
      * Note that the hex drivers are calculated one cycle after Sum so
      * that they have minimal interfere with timing (fmax) analysis.
@@ -73,7 +88,7 @@ module multiplier_toplevel
         BhexL <= BhexL_comb;
         
     end
-    
+    //////////////////////////////////////////////////////////////////////////////////////////
     /* Module instantiation
 	  * You can think of the lines below as instantiating objects (analogy to C++).
      * The things with names like Ahex0_inst, Ahex1_inst... are like a objects
@@ -82,43 +97,78 @@ module multiplier_toplevel
      * in the same way that you'd place a 74-series hex driver chip on your protoboard 
      * Make sure only *one* adder module (out of the three types) is instantiated*/
 	  
-	 // instantiate modules here //////////////////////////////////////////////////////////////
-		shift_reg8 regA(
+	 //instantiate modules here
+		/***************************************************************************************************/
+		DFF		  	  X(
+					 //input
 							 .Clk(Clk),
-							 .Reset(ClearA_LoadB), 
+							 .load(reg_load),
+							 .reset(ClearA_LoadB | Reset),
+							 .B(X_comb),
+					 //output
+							 .D(X_comb));
+							 
+		/****************************************************************************************************/					 
+		shift_reg8 regA(
+					 //input
+							 .Clk(Clk),
+							 .Reset(load_B), 
 							 .Shift_In(X_comb), 
-							 .Load(), 			//input from control unit
-							 .Shift_En(), 		//input from control unit
-							 .D(A[7:0]),		//Data in from Adder_Subtractor
+							 .Load(reg_load),						//input from control unit, whenever add/sub is over, load A
+							 .Shift_En(shift), 					//input from control unit
+							 .D(A[7:0]),							//Data in from Adder_Subtractor
+					 //output
 							 .Shift_Out(A_Shift_Out),
-							 .Data_Out()); 	//8 - bit A value in register here!!
+							 .Data_Out()); 						//8 - bit A value in register here!!
 
 		Shift_reg8 regB(
+					 //input
 							 .Clk(Clk),
 							 .Reset(1'b0),
 							 .Shift_In(A_Shift_Out),
-							 .Load(),			//input from control unit
-							 .Shift_En(),		//input from control unit
-							 .D(S[7:0]),
+							 .Load(load_B),						//input from control unit
+							 .Shift_En(shift),					//input from control unit
+							 .D(S[7:0]),				//concatenate 					*?*
+					 //output
 							 .Shift_Out(Q_),
-							 .Data_Out());		//8 - bit B value in register here!!
+							 .Data_Out());							//8 - bit B value in register here!!
 							 
+		/*****************************************************************************************************/					 
+		DFF			Qminus(
+					//input
+							.Clk(Clk),
+							.load(reg_load),
+							.reset(ClearA_LoadB | Reset),
+							.B(Q_),
+					//output
+							.D(Q_));
+							
+		/****************************************************************************************************/					 
 		nine_bit_adder_subtractor ADD_SUB(
+											 //input
 													 .A(A[7:0]),
 													 .B(S[7:0]),
-													 .fn(),			//input from control unit to decide whether + or -
+													 .fn(fn),		//input from control unit to decide whether + or -
+											 //output
 													 .Sum(A[7:0]));
+		/****************************************************************************************************/					 
+		control control_unit(
+							//input
+									.Clk(Clk),
+									.Reset(Reset),
+									.ClearA_LoadB(ClearA_LoadB),
+									.Run(Run),
+									.M(),
+									.MP(),
+							//output
+									.load(load_B),
+									.shift(shift),
+									.add(add_En),
+									.sub(sub_En),
+									);
 
+	 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-	 //////////////////////////////////////////////////////////////////////////////////////////
-    ripple_adder ripple_adder_inst
-    (
-        .A,             // This is shorthand for .A(A) when both wires/registers have the same name
-        .B,
-        .Sum(Sum_comb), // Connects the Sum_comb wire in this file to the Sum wire in ripple_adder.sv
-        .CO(CO_comb)
-    );
-    
     HexDriver AhexL_inst
     (
         .In0(A[3:0]),   // This connects the 4 least significant bits of 
@@ -144,6 +194,6 @@ module multiplier_toplevel
         .In0(B[7:4]),
         .Out0(BhexU_comb)
     );
-    
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 endmodule

@@ -1,8 +1,8 @@
 module nine_bit_adder_subtractor(
-										input   logic[7:0]     A,
-										input   logic[7:0]     B,
-										input	  logic 			  fn,	// Sub: fn = 1 <--> Add: fn = 0
-										output  logic[8:0]     Sum);
+											input   logic[7:0]     A,
+											input   logic[7:0]     B,
+											input	  logic 			  fn,	// Sub: fn = 1 <--> Add: fn = 0
+											output  logic[8:0]     Sum);
     
 
 

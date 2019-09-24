@@ -20,79 +20,17 @@ module Multiplier_toplevel
 );
 
     /* Declare Internal Registers */
-    logic[7:0]     A;  // use this as an input to your multiplier
-    logic[7:0]     B;  // use this as an input to your multiplier
-    
-    /* Declare Internal Wires
-     * Wheather an internal logic signal becomes a register or wire depends
-     * on if it is written inside an always_ff or always_comb block respectivly */
-//    logic[7:0]      Aval_comb;
-//	   logic[7:0]      Bval_comb;
-//    logic           X_comb;
-//    logic[6:0]      AhexU_comb;
-//    logic[6:0]      AhexL_comb;
-//    logic[6:0]      BhexU_comb;
-//    logic[6:0]      BhexL_comb;
-	 logic			  Q_,Q;					//Represent for Q -1 (Shift out from B)
-	 logic			  shift;					//indicating SHIFT starts
-	 logic			  load_B;				//signal indicating load B and also clear A
-	 logic			  A_Shift_Out;			//temporary variable hold the shift out value from A
-	 logic 			  add_EN, sub_EN;		//Add / Sub Enable, depends on control unit
-	 logic[8:0]      XA;
-	 logic Reset_SH, ClearA_LoadB_SH, Run_SH;	 //X + [7:0]A
-    /* Behavior of registers A, B, X */
-//    always_ff @(posedge Clk) begin
-//        
-//        if (!Reset) begin
-//            // if reset is pressed, clear the adder's input registers
-//            A <= 8'h0000;
-//            B <= 8'h0000;
-//            X <= 1'b0;
-//        end else if (!ClearA_LoadB) begin
-//            // If LoadB is pressed, copy switches to register B
-//            B <= S;
-//				A <= 8'h0000;
-//        end
-//        
-//        // transfer A,B and X from multiplier to output register
-//        // every clock cycle that Run is pressed
-//        if (!Run) begin
-//            Aval <= Aval_comb;
-//            Bval <= Bval_comb;
-//				X    <= X_comb;
-//        end
-//            // else, Aval, Bval and X maintain their previous values  
-//    end
-//	 
-//    //determine signal for load register//////////////////////////////////////////////////////
-//	 assign reg_load = add_EN | sub_EN;			 //whenever add / sub is operated
-//	 
-//	 //determine whether Add or Sub////////////////////////////////////////////////////////////
-//	always_comb 
-//	begin
-//	
-//		 if(add_EN == 1'b1)begin
-//		 fn = 1'b0;							//fn = 0, operate Add
-//		 end
-//		 else if(sub_EN == 1'b1)begin
-//		 fn = 1'b1;							//fn = 1, operate Sub
-//		 end
-//	end
-//	
-//	 //////////////////////////////////////////////////////////////////////////////////////////
-//	 
-//    /* Decoders for HEX drivers and output registers
-//     * Note that the hex drivers are calculated one cycle after Sum so
-//     * that they have minimal interfere with timing (fmax) analysis.
-//     * The human eye can't see this one-cycle latency so it's OK. */
-//    always_ff @(posedge Clk) begin
-//        
-//        AhexU <= AhexU_comb;
-//        AhexL <= AhexL_comb;
-//        BhexU <= BhexU_comb;
-//        BhexL <= BhexL_comb;
-//        
-//    end
+    logic[7:0]      A;  												 // use this as an input to your multiplier
+    logic[7:0]      B;  												 // use this as an input to your multiplier
+	 logic			  Q_,Q;											 // Represent for Q -1 (Shift out from B)
+	 logic			  shift;											 // indicating SHIFT starts
+	 logic			  load_B;										 // signal indicating load B and also clear A
+	 logic			  A_Shift_Out;									 // temporary variable hold the shift out value from A
+	 logic 			  add_EN, sub_EN;								 // Add / Sub Enable, depends on control unit
+	 logic[8:0]      XA;												 // X + [7:0]A
+	 logic 			  Reset_SH, ClearA_LoadB_SH, Run_SH;	 // synchronized signals
+	 logic			  RQ;
+
     //////////////////////////////////////////////////////////////////////////////////////////
     /* Module instantiation
 	  * You can think of the lines below as instantiating objects (analogy to C++).
@@ -109,7 +47,7 @@ module Multiplier_toplevel
 					 //input
 							 .Clk(Clk),
 							 .load(add_EN | sub_EN),
-							 .reset(load_B | Reset_SH),
+							 .reset(ClearA_Load_B_SH | Reset_SH),
 							 .B(XA[8]),
 					 //output
 							 .D(X));
@@ -133,18 +71,18 @@ module Multiplier_toplevel
 							 .Reset(Reset_SH),
 							 .Shift_In(A_Shift_Out),
 							 .Load(load_B),						//input from control unit
-							 .Shift_En(shift),				//input from control unit
-							 .D(S),								//concatenate 					
+							 .Shift_En(shift),					//input from control unit
+							 .D(S),									//concatenate 					
 					 //output
 							 .Shift_Out(Q_),
-							 .Data_Out(B));					//8 - bit B value in register here!!
+							 .Data_Out(B));						//8 - bit B value in register here!!
 							 
 		/*****************************************************************************************************/					 
-		DFlip			Qminus(
+		DFlip		Qminus(
 					//input
 							.Clk(Clk),
 							.load(shift),
-							.reset(ClearA_LoadB | Reset_SH),
+							.reset(ClearA_LoadB_SH | Reset_SH | RQ),
 							.B(Q_),
 					//output
 							.D(Q));
@@ -161,7 +99,7 @@ module Multiplier_toplevel
 		control control_unit(
 							//input
 									.Clk(Clk),
-									.Reset(Reset),
+									.Reset(Reset_SH),
 									.ClearA_LoadB(ClearA_LoadB_SH),
 									.Run(Run_SH),
 									.M(B[0]),
@@ -170,7 +108,8 @@ module Multiplier_toplevel
 									.load(load_B),
 									.shift(shift),
 									.add(add_EN),
-									.sub(sub_EN));
+									.sub(sub_EN),
+									.Reset_Q(RQ));
 
 	 /////////////////////////////////////////////////////////////////////////////////////////////////
 

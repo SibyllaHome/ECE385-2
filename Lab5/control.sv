@@ -1,12 +1,12 @@
 module control(
 					input logic Clk, Reset, ClearA_LoadB, Run, M, MP,  //M = B[0], MP = Q-1
-					output logic load, shift, add, sub
+					output logic load, shift, add, sub, Reset_Q
 					);
 	
-	enum logic [4:0] {A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,ST,EN} curr_state, next_state;  //ST start, EN end
+	enum logic [4:0] {ST,A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,EN} curr_state, next_state;  //ST start, EN end
 	
 	
-	always_ff @ (posedge Clk)
+	always_ff @ (posedge Clk or posedge Reset)
 	begin
 		if (Reset) 
 			curr_state <= ST;
@@ -56,11 +56,14 @@ module control(
 				shift = 1'b0;
 				add 	= 1'b0;
 				sub 	= 1'b0;
+				Reset_Q = 1'b1;
 			end
 			
 			//add or sub or do nothing
+			
 			A,B,C,D,E,F,G,H:
 			begin
+				Reset_Q = 1'b0;
 				load 	= 1'b0;
 				shift = 1'b0;
 				if (MP == M) 
@@ -75,16 +78,16 @@ module control(
 				end
 				else
 				begin
-					if(M)
-					begin
-					add = 1'b0;
-					sub = 1'b1;
-					end
-					else
-					begin
+					// if(M)
+					// begin
+					// add = 1'b0;
+					// sub = 1'b1;
+					// end
+					// else
+					// begin
 					add = 1'b1;
 					sub = 1'b0;
-					end
+					// end
 				end
 
 			end
@@ -92,19 +95,13 @@ module control(
 			//shift
 			AS,BS,CS,DS,ES,FS,GS,HS:
 			begin
+				Reset_Q = 1'b0;
 				load 	= 1'b0;
 				shift = 1'b1;
 				add 	= 1'b0;
 				sub 	= 1'b0;
 			end
 			
-			default:
-			begin
-				load  = ClearA_LoadB;
-				shift = 1'b0;
-				add 	= 1'b0;
-				sub 	= 1'b0;
-			end
 		endcase
 	end
 	

@@ -1,5 +1,5 @@
 Analysis & Synthesis report for ECE385_LAB_5
-Tue Sep 24 15:56:32 2019
+Tue Sep 24 16:05:41 2019
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -46,15 +46,15 @@ refer to the applicable agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Tue Sep 24 15:56:32 2019       ;
+; Analysis & Synthesis Status        ; Successful - Tue Sep 24 16:05:41 2019       ;
 ; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                      ; ECE385_LAB_5                                ;
 ; Top-level Entity Name              ; Multiplier_toplevel                         ;
 ; Family                             ; Cyclone IV E                                ;
-; Total logic elements               ; 98                                          ;
+; Total logic elements               ; 99                                          ;
 ;     Total combinational functions  ; 83                                          ;
-;     Dedicated logic registers      ; 39                                          ;
-; Total registers                    ; 39                                          ;
+;     Dedicated logic registers      ; 40                                          ;
+; Total registers                    ; 40                                          ;
 ; Total pins                         ; 57                                          ;
 ; Total virtual pins                 ; 0                                           ;
 ; Total memory bits                  ; 0                                           ;
@@ -186,7 +186,7 @@ refer to the applicable agreement for further details.
 +---------------------------------------------+-----------+
 ; Resource                                    ; Usage     ;
 +---------------------------------------------+-----------+
-; Estimated Total logic elements              ; 98        ;
+; Estimated Total logic elements              ; 99        ;
 ;                                             ;           ;
 ; Total combinational functions               ; 83        ;
 ; Logic element usage by number of LUT inputs ;           ;
@@ -198,8 +198,8 @@ refer to the applicable agreement for further details.
 ;     -- normal mode                          ; 83        ;
 ;     -- arithmetic mode                      ; 0         ;
 ;                                             ;           ;
-; Total registers                             ; 39        ;
-;     -- Dedicated logic registers            ; 39        ;
+; Total registers                             ; 40        ;
+;     -- Dedicated logic registers            ; 40        ;
 ;     -- I/O registers                        ; 0         ;
 ;                                             ;           ;
 ; I/O pins                                    ; 57        ;
@@ -207,9 +207,9 @@ refer to the applicable agreement for further details.
 ; Embedded Multiplier 9-bit elements          ; 0         ;
 ;                                             ;           ;
 ; Maximum fan-out node                        ; Clk~input ;
-; Maximum fan-out                             ; 39        ;
-; Total fan-out                               ; 522       ;
-; Average fan-out                             ; 2.21      ;
+; Maximum fan-out                             ; 40        ;
+; Total fan-out                               ; 525       ;
+; Average fan-out                             ; 2.22      ;
 +---------------------------------------------+-----------+
 
 
@@ -218,14 +218,14 @@ refer to the applicable agreement for further details.
 +----------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------------------------------------------+---------------------------+--------------+
 ; Compilation Hierarchy Node             ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                  ; Entity Name               ; Library Name ;
 +----------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------------------------------------------+---------------------------+--------------+
-; |Multiplier_toplevel                   ; 83 (0)              ; 39 (0)                    ; 0           ; 0            ; 0       ; 0         ; 57   ; 0            ; |Multiplier_toplevel                                                                 ; Multiplier_toplevel       ; work         ;
+; |Multiplier_toplevel                   ; 83 (1)              ; 40 (0)                    ; 0           ; 0            ; 0       ; 0         ; 57   ; 0            ; |Multiplier_toplevel                                                                 ; Multiplier_toplevel       ; work         ;
 ;    |DFlip:Qminus|                      ; 2 (2)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|DFlip:Qminus                                                    ; DFlip                     ; work         ;
 ;    |DFlip:bitX|                        ; 1 (1)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|DFlip:bitX                                                      ; DFlip                     ; work         ;
 ;    |HexDriver:AhexL_inst|              ; 7 (7)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|HexDriver:AhexL_inst                                            ; HexDriver                 ; work         ;
 ;    |HexDriver:AhexU_inst|              ; 7 (7)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|HexDriver:AhexU_inst                                            ; HexDriver                 ; work         ;
 ;    |HexDriver:BhexL_inst|              ; 7 (7)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|HexDriver:BhexL_inst                                            ; HexDriver                 ; work         ;
 ;    |HexDriver:BhexU_inst|              ; 7 (7)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|HexDriver:BhexU_inst                                            ; HexDriver                 ; work         ;
-;    |control:control_unit|              ; 11 (11)             ; 18 (18)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|control:control_unit                                            ; control                   ; work         ;
+;    |control:control_unit|              ; 11 (11)             ; 19 (19)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|control:control_unit                                            ; control                   ; work         ;
 ;    |nine_bit_adder_subtractor:ADD_SUB| ; 17 (1)              ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|nine_bit_adder_subtractor:ADD_SUB                               ; nine_bit_adder_subtractor ; work         ;
 ;       |four_bit_ra:f0|                 ; 8 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0                ; four_bit_ra               ; work         ;
 ;          |full_adder:fa0|              ; 2 (2)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0|full_adder:fa0 ; full_adder                ; work         ;
@@ -238,7 +238,7 @@ refer to the applicable agreement for further details.
 ;          |full_adder:fa2|              ; 2 (2)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f1|full_adder:fa2 ; full_adder                ; work         ;
 ;          |full_adder:fa3|              ; 2 (2)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f1|full_adder:fa3 ; full_adder                ; work         ;
 ;    |shift_reg8:regA|                   ; 11 (11)             ; 8 (8)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|shift_reg8:regA                                                 ; shift_reg8                ; work         ;
-;    |shift_reg8:regB|                   ; 10 (10)             ; 8 (8)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|shift_reg8:regB                                                 ; shift_reg8                ; work         ;
+;    |shift_reg8:regB|                   ; 9 (9)               ; 8 (8)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|shift_reg8:regB                                                 ; shift_reg8                ; work         ;
 ;    |sync:button_sync[0]|               ; 1 (1)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|sync:button_sync[0]                                             ; sync                      ; work         ;
 ;    |sync:button_sync[1]|               ; 1 (1)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|sync:button_sync[1]                                             ; sync                      ; work         ;
 ;    |sync:button_sync[2]|               ; 1 (1)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |Multiplier_toplevel|sync:button_sync[2]                                             ; sync                      ; work         ;
@@ -247,30 +247,31 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 
 
 Encoding Type:  One-Hot
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; State Machine - |Multiplier_toplevel|control:control_unit|curr_state                                                                                                                                                                                                                                  ;
-+---------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+
-; Name          ; curr_state.EN ; curr_state.HS ; curr_state.H ; curr_state.GS ; curr_state.G ; curr_state.FS ; curr_state.F ; curr_state.ES ; curr_state.E ; curr_state.DS ; curr_state.D ; curr_state.CS ; curr_state.C ; curr_state.BS ; curr_state.B ; curr_state.AS ; curr_state.A ; curr_state.ST ;
-+---------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+
-; curr_state.ST ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ;
-; curr_state.A  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 1             ;
-; curr_state.AS ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 1             ;
-; curr_state.B  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 1             ;
-; curr_state.BS ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.C  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.CS ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.D  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.DS ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.E  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.ES ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.F  ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.FS ; 0             ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.G  ; 0             ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.GS ; 0             ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.H  ; 0             ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.HS ; 0             ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-; curr_state.EN ; 1             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ;
-+---------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |Multiplier_toplevel|control:control_unit|curr_state                                                                                                                                                                                                                                                          ;
++-------------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+-------------------+---------------+
+; Name              ; curr_state.EN ; curr_state.HS ; curr_state.H ; curr_state.GS ; curr_state.G ; curr_state.FS ; curr_state.F ; curr_state.ES ; curr_state.E ; curr_state.DS ; curr_state.D ; curr_state.CS ; curr_state.C ; curr_state.BS ; curr_state.B ; curr_state.AS ; curr_state.A ; curr_state.clearA ; curr_state.ST ;
++-------------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+-------------------+---------------+
+; curr_state.ST     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 0             ;
+; curr_state.clearA ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1                 ; 1             ;
+; curr_state.A      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0                 ; 1             ;
+; curr_state.AS     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0                 ; 1             ;
+; curr_state.B      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.BS     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.C      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.CS     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.D      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.DS     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.E      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.ES     ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.F      ; 0             ; 0             ; 0            ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.FS     ; 0             ; 0             ; 0            ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.G      ; 0             ; 0             ; 0            ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.GS     ; 0             ; 0             ; 0            ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.H      ; 0             ; 0             ; 1            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.HS     ; 0             ; 1             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
+; curr_state.EN     ; 1             ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0             ; 0            ; 0                 ; 1             ;
++-------------------+---------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+---------------+--------------+-------------------+---------------+
 
 
 +------------------------------------------------------------+
@@ -292,10 +293,10 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 39    ;
+; Total registers                              ; 40    ;
 ; Number of registers using Synchronous Clear  ; 9     ;
 ; Number of registers using Synchronous Load   ; 0     ;
-; Number of registers using Asynchronous Clear ; 18    ;
+; Number of registers using Asynchronous Clear ; 19    ;
 ; Number of registers using Asynchronous Load  ; 0     ;
 ; Number of registers using Clock Enable       ; 16    ;
 ; Number of registers using Preset             ; 0     ;
@@ -308,8 +309,8 @@ Encoding Type:  One-Hot
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                       ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------+
 ; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |Multiplier_toplevel|shift_reg8:regA|Data_Out[7] ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |Multiplier_toplevel|shift_reg8:regB|Data_Out[6] ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |Multiplier_toplevel|control:control_unit|add    ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |Multiplier_toplevel|shift_reg8:regB|Data_Out[7] ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |Multiplier_toplevel|control:control_unit|sub    ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------+
 
 
@@ -328,8 +329,8 @@ Encoding Type:  One-Hot
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
 ; boundary_port         ; 57                          ;
-; cycloneiii_ff         ; 39                          ;
-;     CLR               ; 18                          ;
+; cycloneiii_ff         ; 40                          ;
+;     CLR               ; 19                          ;
 ;     ENA               ; 8                           ;
 ;     ENA SCLR          ; 8                           ;
 ;     SCLR              ; 1                           ;
@@ -342,7 +343,7 @@ Encoding Type:  One-Hot
 ;         4 data inputs ; 61                          ;
 ;                       ;                             ;
 ; Max LUT depth         ; 11.00                       ;
-; Average LUT depth     ; 4.49                        ;
+; Average LUT depth     ; 4.53                        ;
 +-----------------------+-----------------------------+
 
 
@@ -361,7 +362,7 @@ Encoding Type:  One-Hot
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Tue Sep 24 15:56:18 2019
+    Info: Processing started: Tue Sep 24 16:05:32 2019
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
@@ -386,30 +387,28 @@ Info (12021): Found 3 design units, including 3 entities, in source file synchro
 Info (12021): Found 1 design units, including 1 entities, in source file testbench.sv
     Info (12023): Found entity 1: testbench File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/testbench.sv Line: 1
 Warning (10236): Verilog HDL Implicit Net warning at Multiplier_toplevel.sv(50): created implicit net for "ClearA_Load_B_SH" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 50
-Warning (10236): Verilog HDL Implicit Net warning at Multiplier_toplevel.sv(59): created implicit net for "RA" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 59
 Info (12127): Elaborating entity "Multiplier_toplevel" for the top level hierarchy
 Warning (10030): Net "ClearA_Load_B_SH" at Multiplier_toplevel.sv(50) has no driver or initial value, using a default initial value '0' File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 50
-Warning (10030): Net "RA" at Multiplier_toplevel.sv(59) has no driver or initial value, using a default initial value '0' File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 59
 Info (12128): Elaborating entity "DFlip" for hierarchy "DFlip:bitX" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 53
 Info (12128): Elaborating entity "shift_reg8" for hierarchy "shift_reg8:regA" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 66
 Info (12128): Elaborating entity "nine_bit_adder_subtractor" for hierarchy "nine_bit_adder_subtractor:ADD_SUB" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 97
 Info (12128): Elaborating entity "four_bit_ra" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 14
 Info (12128): Elaborating entity "full_adder" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0|full_adder:fa0" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/9_bit_adder.sv Line: 36
-Info (12128): Elaborating entity "control" for hierarchy "control:control_unit" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 112
-Info (12128): Elaborating entity "HexDriver" for hierarchy "HexDriver:AhexL_inst" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 121
-Info (12128): Elaborating entity "sync" for hierarchy "sync:button_sync[0]" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 148
+Info (12128): Elaborating entity "control" for hierarchy "control:control_unit" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 113
+Info (12128): Elaborating entity "HexDriver" for hierarchy "HexDriver:AhexL_inst" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 122
+Info (12128): Elaborating entity "sync" for hierarchy "sync:button_sync[0]" File: C:/Users/nick1/Documents/GitHub/ECE385/Lab5/Multiplier_toplevel.sv Line: 149
 Info (286030): Timing-Driven Synthesis is running
 Info (17049): 5 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 155 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 156 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 12 input pins
     Info (21059): Implemented 45 output pins
-    Info (21061): Implemented 98 logic cells
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 5 warnings
+    Info (21061): Implemented 99 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 3 warnings
     Info: Peak virtual memory: 4793 megabytes
-    Info: Processing ended: Tue Sep 24 15:56:32 2019
-    Info: Elapsed time: 00:00:14
-    Info: Total CPU time (on all processors): 00:00:28
+    Info: Processing ended: Tue Sep 24 16:05:41 2019
+    Info: Elapsed time: 00:00:09
+    Info: Total CPU time (on all processors): 00:00:18
 
 

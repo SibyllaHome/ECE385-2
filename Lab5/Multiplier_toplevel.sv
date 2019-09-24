@@ -29,7 +29,7 @@ module Multiplier_toplevel
 	 logic 			  add_EN, sub_EN;								 // Add / Sub Enable, depends on control unit
 	 logic[8:0]      XA;												 // X + [7:0]A
 	 logic 			  Reset_SH, ClearA_LoadB_SH, Run_SH;	 // synchronized signals
-	 logic			  RQ;
+	 logic			  RQ,RA;
 
     //////////////////////////////////////////////////////////////////////////////////////////
     /* Module instantiation
@@ -56,7 +56,7 @@ module Multiplier_toplevel
 		shift_reg8 regA(
 					 //input
 							 .Clk(Clk),
-							 .Reset(load_B | Reset_SH), 
+							 .Reset(load_B | Reset_SH | RA), 
 							 .Shift_In(X), 
 							 .Load(add_EN | sub_EN),			//input from control unit, whenever add/sub is over, load A
 							 .Shift_En(shift), 					//input from control unit
@@ -109,7 +109,8 @@ module Multiplier_toplevel
 									.shift(shift),
 									.add(add_EN),
 									.sub(sub_EN),
-									.Reset_Q(RQ));
+									.Reset_Q(RQ),
+									.Reset_A(RA));
 
 	 /////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,9 +1,9 @@
 module control(
 					input logic Clk, Reset, ClearA_LoadB, Run, M, MP,  //M = B[0], MP = Q-1
-					output logic load, shift, add, sub, Reset_Q
+					output logic load, shift, add, sub, Reset_Q, Reset_A
 					);
 	
-	enum logic [4:0] {ST,A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,EN} curr_state, next_state;  //ST start, EN end
+	enum logic [4:0] {ST,clearA,A,AS,B,BS,C,CS,D,DS,E,ES,F,FS,G,GS,H,HS,EN} curr_state, next_state;  //ST start, EN end
 	
 	
 	always_ff @ (posedge Clk or posedge Reset)
@@ -22,7 +22,8 @@ module control(
 		unique case (curr_state)
 		
 		ST : if (Run)
-					next_state = A;
+					next_state = clearA;
+		clearA:	next_state = A;
 		A  : 		next_state = AS;
 		AS	:		next_state = B;
 		B  :     next_state = BS;
@@ -57,12 +58,24 @@ module control(
 				add 	= 1'b0;
 				sub 	= 1'b0;
 				Reset_Q = 1'b1;
+				Reset_A = 1'b0;
+			end
+			
+			//only to clear A after a run
+			clearA:
+			begin
+			load 	= 1'b0;
+			shift = 1'b0;
+			add 	= 1'b0;
+			sub 	= 1'b0;
+			Reset_Q = 1'b0;
+			Reset_A = 1'b1;
 			end
 			
 			//add or sub or do nothing
-			
 			A,B,C,D,E,F,G,H:
 			begin
+				Reset_A = 1'b0;
 				Reset_Q = 1'b0;
 				load 	= 1'b0;
 				shift = 1'b0;
@@ -96,6 +109,7 @@ module control(
 			AS,BS,CS,DS,ES,FS,GS,HS:
 			begin
 				Reset_Q = 1'b0;
+				Reset_A = 1'b0;
 				load 	= 1'b0;
 				shift = 1'b1;
 				add 	= 1'b0;

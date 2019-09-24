@@ -38,7 +38,8 @@ module Multiplier_toplevel
 	 logic			  load_B;				//signal indicating load B and also clear A
 	 logic			  A_Shift_Out;			//temporary variable hold the shift out value from A
 	 logic 			  add_EN, sub_EN;		//Add / Sub Enable, depends on control unit
-	 logic[8:0]      XA;						//X + [7:0]A
+	 logic[8:0]      XA;
+	 logic Reset_SH, ClearA_LoadB_SH, Run_SH;	 //X + [7:0]A
     /* Behavior of registers A, B, X */
 //    always_ff @(posedge Clk) begin
 //        
@@ -108,7 +109,7 @@ module Multiplier_toplevel
 					 //input
 							 .Clk(Clk),
 							 .load(add_EN | sub_EN),
-							 .reset(load_B | Reset),
+							 .reset(load_B | Reset_SH),
 							 .B(XA[8]),
 					 //output
 							 .D(X));
@@ -117,7 +118,7 @@ module Multiplier_toplevel
 		shift_reg8 regA(
 					 //input
 							 .Clk(Clk),
-							 .Reset(load_B | Reset), 
+							 .Reset(load_B | Reset_SH), 
 							 .Shift_In(X), 
 							 .Load(add_EN | sub_EN),			//input from control unit, whenever add/sub is over, load A
 							 .Shift_En(shift), 					//input from control unit
@@ -129,7 +130,7 @@ module Multiplier_toplevel
 		shift_reg8 regB(
 					 //input
 							 .Clk(Clk),
-							 .Reset(Reset),
+							 .Reset(Reset_SH),
 							 .Shift_In(A_Shift_Out),
 							 .Load(load_B),						//input from control unit
 							 .Shift_En(shift),				//input from control unit
@@ -143,7 +144,7 @@ module Multiplier_toplevel
 					//input
 							.Clk(Clk),
 							.load(shift),
-							.reset(ClearA_LoadB | Reset),
+							.reset(ClearA_LoadB | Reset_SH),
 							.B(Q_),
 					//output
 							.D(Q));
@@ -161,8 +162,8 @@ module Multiplier_toplevel
 							//input
 									.Clk(Clk),
 									.Reset(Reset),
-									.ClearA_LoadB(ClearA_LoadB),
-									.Run(Run),
+									.ClearA_LoadB(ClearA_LoadB_SH),
+									.Run(Run_SH),
 									.M(B[0]),
 									.MP(Q),
 							//output
@@ -200,6 +201,13 @@ module Multiplier_toplevel
     );
 	 
 	 
+	 sync button_sync[2:0]
+	(
+		Clk,
+		{~Reset, ~ClearA_LoadB, ~Run},
+		{Reset_SH, ClearA_LoadB_SH, Run_SH}
+	);
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 endmodule

@@ -47,15 +47,15 @@ refer to the applicable agreement for further details.
 ; Family                             ; Cyclone IV E                                ;
 ; Device                             ; EP4CE115F29C7                               ;
 ; Timing Models                      ; Final                                       ;
-; Total logic elements               ; N/A until Partition Merge                   ;
-;     Total combinational functions  ; N/A until Partition Merge                   ;
-;     Dedicated logic registers      ; N/A until Partition Merge                   ;
-; Total registers                    ; N/A until Partition Merge                   ;
-; Total pins                         ; N/A until Partition Merge                   ;
-; Total virtual pins                 ; N/A until Partition Merge                   ;
-; Total memory bits                  ; N/A until Partition Merge                   ;
-; Embedded Multiplier 9-bit elements ; N/A until Partition Merge                   ;
-; Total PLLs                         ; N/A until Partition Merge                   ;
+; Total logic elements               ; 98 / 114,480 ( < 1 % )                      ;
+;     Total combinational functions  ; 98 / 114,480 ( < 1 % )                      ;
+;     Dedicated logic registers      ; 39 / 114,480 ( < 1 % )                      ;
+; Total registers                    ; 39                                          ;
+; Total pins                         ; 57 / 529 ( 11 % )                           ;
+; Total virtual pins                 ; 0                                           ;
+; Total memory bits                  ; 0 / 3,981,312 ( 0 % )                       ;
+; Embedded Multiplier 9-bit elements ; 0 / 532 ( 0 % )                             ;
+; Total PLLs                         ; 0 / 4 ( 0 % )                               ;
 +------------------------------------+---------------------------------------------+
 
 
@@ -114,7 +114,11 @@ refer to the applicable agreement for further details.
 ------------
 ; Flow Log ;
 ------------
-quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5 --analysis_and_elaboration
+quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
+quartus_fit --read_settings_files=off --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
+quartus_asm --read_settings_files=off --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
+quartus_sta ECE385_LAB_5 -c ECE385_LAB_5
+quartus_eda --read_settings_files=off --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
 
 
 

@@ -63,7 +63,7 @@ module control(
 			begin
 				load 	= 1'b0;
 				shift = 1'b0;
-				if (MP == M)
+				if (MP == M) 
 				begin
 					add = 1'b0;
 					sub = 1'b0;
@@ -75,9 +75,18 @@ module control(
 				end
 				else
 				begin
+					if(M)
+					begin
+					add = 1'b0;
+					sub = 1'b1;
+					end
+					else
+					begin
 					add = 1'b1;
 					sub = 1'b0;
+					end
 				end
+
 			end
 			
 			//shift

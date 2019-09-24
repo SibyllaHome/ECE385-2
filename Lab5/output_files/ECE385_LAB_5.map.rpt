@@ -1,5 +1,5 @@
 Analysis & Synthesis report for ECE385_LAB_5
-Mon Sep 23 21:47:29 2019
+Mon Sep 23 22:24:00 2019
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -36,7 +36,7 @@ refer to the applicable agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Failed - Mon Sep 23 21:47:29 2019           ;
+; Analysis & Synthesis Status        ; Failed - Mon Sep 23 22:24:00 2019           ;
 ; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                      ; ECE385_LAB_5                                ;
 ; Top-level Entity Name              ; Multiplier_toplevel                         ;
@@ -161,7 +161,7 @@ refer to the applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-    Info: Processing started: Mon Sep 23 21:47:20 2019
+    Info: Processing started: Mon Sep 23 22:23:51 2019
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off ECE385_LAB_5 -c ECE385_LAB_5
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
@@ -177,22 +177,20 @@ Info (12021): Found 1 design units, including 1 entities, in source file shift_r
     Info (12023): Found entity 1: shift_reg8 File: C:/Apps/Github/ECE385/Lab5/shift_reg_8.sv Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file dflipflop.sv
     Info (12023): Found entity 1: DFlip File: C:/Apps/Github/ECE385/Lab5/Dflipflop.sv Line: 1
-Info (12127): Elaborating entity "Multiplier_toplevel" for the top level hierarchy
-Info (12128): Elaborating entity "DFlip" for hierarchy "DFlip:bitX" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 115
-Info (12128): Elaborating entity "shift_reg8" for hierarchy "shift_reg8:regA" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 128
-Info (12128): Elaborating entity "nine_bit_adder_subtractor" for hierarchy "nine_bit_adder_subtractor:ADD_SUB" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 159
-Info (12128): Elaborating entity "four_bit_ra" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0" File: C:/Apps/Github/ECE385/Lab5/9_bit_adder.sv Line: 14
-Info (12128): Elaborating entity "full_adder" for hierarchy "nine_bit_adder_subtractor:ADD_SUB|four_bit_ra:f0|full_adder:fa0" File: C:/Apps/Github/ECE385/Lab5/9_bit_adder.sv Line: 36
-Info (12128): Elaborating entity "control" for hierarchy "control:control_unit" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 174
-Error (12006): Node instance "regB" instantiates undefined entity "Shift_reg8". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 140
-Error (12006): Node instance "AhexL_inst" instantiates undefined entity "HexDriver". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 183
-Error (12006): Node instance "AhexU_inst" instantiates undefined entity "HexDriver". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 189
-Error (12006): Node instance "BhexL_inst" instantiates undefined entity "HexDriver". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 196
-Error (12006): Node instance "BhexU_inst" instantiates undefined entity "HexDriver". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 202
-Error: Quartus Prime Analysis & Synthesis was unsuccessful. 5 errors, 1 warning
-    Error: Peak virtual memory: 4734 megabytes
-    Error: Processing ended: Mon Sep 23 21:47:29 2019
+Info (12021): Found 1 design units, including 1 entities, in source file hexdriver.sv
+    Info (12023): Found entity 1: HexDriver File: C:/Apps/Github/ECE385/Lab5/HexDriver.sv Line: 1
+Info (12021): Found 3 design units, including 3 entities, in source file synchronizers.sv
+    Info (12023): Found entity 1: sync File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 4
+    Info (12023): Found entity 2: sync_r0 File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 18
+    Info (12023): Found entity 3: sync_r1 File: C:/Apps/Github/ECE385/Lab5/Synchronizers.sv Line: 39
+Warning (10236): Verilog HDL Implicit Net warning at Multiplier_toplevel.sv(135): created implicit net for "loadB" File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 135
+Error (10161): Verilog HDL error at Multiplier_toplevel.sv(60): object "Aval_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 60
+Error (10161): Verilog HDL error at Multiplier_toplevel.sv(61): object "Bval_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 61
+Error (10161): Verilog HDL error at Multiplier_toplevel.sv(62): object "X_comb" is not declared. Verify the object name is correct. If the name is correct, declare the object. File: C:/Apps/Github/ECE385/Lab5/Multiplier_toplevel.sv Line: 62
+Error: Quartus Prime Analysis & Synthesis was unsuccessful. 3 errors, 2 warnings
+    Error: Peak virtual memory: 4730 megabytes
+    Error: Processing ended: Mon Sep 23 22:24:00 2019
     Error: Elapsed time: 00:00:09
-    Error: Total CPU time (on all processors): 00:00:20
+    Error: Total CPU time (on all processors): 00:00:19
 
 

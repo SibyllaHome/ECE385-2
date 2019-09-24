@@ -127,12 +127,12 @@ module Multiplier_toplevel
 							 .Shift_Out(A_Shift_Out),
 							 .Data_Out(A)); 						//8 - bit A value in register here!!
 
-		Shift_reg8 regB(
+		shift_reg8 regB(
 					 //input
 							 .Clk(Clk),
 							 .Reset(Reset),
 							 .Shift_In(A_Shift_Out),
-							 .Load(load_B),						//input from control unit
+							 .Load(loadB),						//input from control unit
 							 .Shift_En(shift),					//input from control unit
 							 .D(S),				//concatenate 					*?*
 					 //output

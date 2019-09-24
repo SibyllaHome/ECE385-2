@@ -1,5 +1,5 @@
 Flow report for ECE385_LAB_5
-Mon Sep 23 21:47:29 2019
+Mon Sep 23 22:24:00 2019
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -40,7 +40,7 @@ refer to the applicable agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Flow Summary                                                                     ;
 +------------------------------------+---------------------------------------------+
-; Flow Status                        ; Flow Failed - Mon Sep 23 21:47:29 2019      ;
+; Flow Status                        ; Flow Failed - Mon Sep 23 22:24:00 2019      ;
 ; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                      ; ECE385_LAB_5                                ;
 ; Top-level Entity Name              ; Multiplier_toplevel                         ;
@@ -64,7 +64,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 09/23/2019 21:47:21 ;
+; Start date & time ; 09/23/2019 22:23:52 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; ECE385_LAB_5        ;
 +-------------------+---------------------+
@@ -75,7 +75,7 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+---------------------+----------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name         ; Section Id     ;
 +-------------------------------------+----------------------------------------+---------------+---------------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 1098056997626.156929324103308          ; --            ; --                  ; --             ;
+; COMPILER_SIGNATURE_ID               ; 1098056997626.156929543206200          ; --            ; --                  ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Systemverilog Hdl                      ; --            ; --                  ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (SystemVerilog)        ; <None>        ; --                  ; --             ;
 ; EDA_TIME_SCALE                      ; 1 ps                                   ; --            ; --                  ; eda_simulation ;
@@ -97,8 +97,8 @@ refer to the applicable agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:09     ; 1.0                     ; 4734 MB             ; 00:00:20                           ;
-; Total                ; 00:00:09     ; --                      ; --                  ; 00:00:20                           ;
+; Analysis & Synthesis ; 00:00:09     ; 1.0                     ; 4730 MB             ; 00:00:19                           ;
+; Total                ; 00:00:09     ; --                      ; --                  ; 00:00:19                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

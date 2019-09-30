@@ -41,8 +41,10 @@ logic [1:0] PCMUX, ADDR2MUX, ALUK;
 logic DRMUX, SR1MUX, SR2MUX, ADDR1MUX;
 logic MIO_EN;
 
+logic PC_PLUS_ONE;
 logic [15:0] MDR_In;
-logic [15:0] MAR, MDR, IR, PC;
+logic [15:0] MAR, MDR, IR, PC;	
+logic [15:0] PC_MUX_OUT, BUS; 	// MUX_OUTPUTs & BUS
 logic [15:0] Data_from_SRAM, Data_to_SRAM;
 
 // Signals being displayed on hex display
@@ -74,8 +76,48 @@ assign MIO_EN = ~OE;
 
 // You need to make your own datapath module and connect everything to the datapath
 // Be careful about whether Reset is active high or low
-datapath d0 (/* Please fill in the signals.... */);
+// datapath d0 (/* Please fill in the signals.... */);
 
+// Registers:----------------------------------------------
+// PC:
+reg_16 PC(.Clk,
+			 .LoadEN(LD_PC),
+			 .Reset(Reset_ah),
+			 .Din(PC_MUX_OUT),
+			 .Dout(BUS));
+
+assign PC_PLUS_ONE = PC + 1'b1;
+
+
+reg_16 MDR(.Clk,
+			  .LoadEN(LD_MDR),
+			  .Reset(Reset_ah),
+			  .Din(MDR_MUX_OUT),
+			  .Dout(MDR));
+			 
+// MUXes:--------------------------------------------------
+// PC MUX
+PC_MUX pc_mux(.Input0(BUS),			// from BUS
+				  .Input1(),				// from +
+				  .Input2(PC_PLUS_ONE)	// from PC + 1
+				  .Select(PCMUX),
+				  .Out(PC_MUX_OUT));
+				  
+// MDR MUX:
+MDR_MUX mdr_mux(.Input0(BUS),
+					 .Input1(MDR_IN),
+					 .Select(MIO_EN),
+					 .OUT(MDR_MUX_OUT));
+				  
+// Gate MUX (4 to 1), Gate MarMUX, Gate PC, Gate ALU, Gate MDR
+Gate_MUX gate_mux(.Input0(MAR),	// output from MAR
+						.Input1(PC),	// output from PC
+						.Input2(),		// ALU OUTPUT *NOT IN WEEK1*
+						.Input3(MDR),	// output from MDR
+						.Select({GateMARMUX,GatePC,GateALU,GateMDR}),
+						.OUT(BUS));		// output to BUS
+			
+			
 // Our SRAM and I/O controller
 Mem2IO memory_subsystem(
     .*, .Reset(Reset_ah), .ADDR(ADDR), .Switches(S),

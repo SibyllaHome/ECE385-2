@@ -1,4 +1,4 @@
-module 16_register (input  logic Clk, LoadEn, Reset,
+module sixteen_register (input  logic Clk, LoadEn, Reset,
 						  input  logic [15:0] Din,
 						  output logic [15:0] Dout);
 					

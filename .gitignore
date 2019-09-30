@@ -6,4 +6,5 @@
 **/incremental_db
 **/output_files
 **/simulation
-./ECE385_LAB_5_description.txt
+*.txt
+*.rpt

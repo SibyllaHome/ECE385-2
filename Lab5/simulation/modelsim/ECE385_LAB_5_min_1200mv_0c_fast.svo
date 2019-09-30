@@ -16,7 +16,7 @@
 // PROGRAM "Quartus Prime"
 // VERSION "Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
 
-// DATE "09/24/2019 16:06:13"
+// DATE "09/25/2019 12:05:57"
 
 // 
 // Device: Altera EP4CE115F29C7 Package FBGA780
@@ -41,18 +41,18 @@ module Multiplier_toplevel (
 	AhexL,
 	BhexU,
 	BhexL);
-input 	logic Clk ;
-input 	logic Reset ;
-input 	logic ClearA_LoadB ;
-input 	logic Run ;
-input 	logic [7:0] S ;
-output 	logic X ;
-output 	logic [7:0] Aval ;
-output 	logic [7:0] Bval ;
-output 	logic [6:0] AhexU ;
-output 	logic [6:0] AhexL ;
-output 	logic [6:0] BhexU ;
-output 	logic [6:0] BhexL ;
+input 	Clk;
+input 	Reset;
+input 	ClearA_LoadB;
+input 	Run;
+input 	[7:0] S;
+output 	X;
+output 	[7:0] Aval;
+output 	[7:0] Bval;
+output 	[6:0] AhexU;
+output 	[6:0] AhexL;
+output 	[6:0] BhexU;
+output 	[6:0] BhexL;
 
 // Design Ports Information
 // X	=>  Location: PIN_F17,	 I/O Standard: 2.5 V,	 Current Strength: Default

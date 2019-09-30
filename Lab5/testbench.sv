@@ -13,7 +13,11 @@ logic [6:0] AhexL,
 				AhexU,
 				BhexL,
 				BhexU; 
+logic [15:0] expected;
 Multiplier_toplevel mult0(.*);
+
+assign expected[15:8] = Aval;
+assign expected[7:0]	 = Bval;
 
 //Clock
 always begin : CLOCK_GENERATION

@@ -86,7 +86,7 @@ sixteen_register PC_reg(.Clk,
 								.Din(PC_MUX_OUT),
 								.Dout(PC));
 
-assign PC_PLUS_ONE = PC + 16'b0000000000000001;
+assign PC_PLUS_ONE = PC + 16'h0001;
 
 
 sixteen_register MDR_reg(.Clk,
@@ -94,6 +94,12 @@ sixteen_register MDR_reg(.Clk,
 								 .Reset(Reset_ah),
 								 .Din(MDR_MUX_OUT),
 								 .Dout(MDR));
+								 
+sixteen_register MAR_reg(.Clk,
+								 .LoadEn(LD_MAR),
+								 .Reset(Reset_ah),
+								 .Din(BUS),
+								 .Dout(MAR));
 			 
 // MUXes:--------------------------------------------------
 // PC MUX

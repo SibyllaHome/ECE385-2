@@ -80,42 +80,42 @@ assign MIO_EN = ~OE;
 
 // Registers:----------------------------------------------
 // PC:
-reg_16 PC(.Clk,
-			 .LoadEN(LD_PC),
-			 .Reset(Reset_ah),
-			 .Din(PC_MUX_OUT),
-			 .Dout(BUS));
+sixteen_register PC_reg(.Clk,
+								.LoadEn(LD_PC),
+								.Reset(Reset_ah),
+								.Din(PC_MUX_OUT),
+								.Dout(BUS));
 
 assign PC_PLUS_ONE = PC + 1'b1;
 
 
-reg_16 MDR(.Clk,
-			  .LoadEN(LD_MDR),
-			  .Reset(Reset_ah),
-			  .Din(MDR_MUX_OUT),
-			  .Dout(MDR));
+sixteen_register MDR_reg(.Clk,
+								 .LoadEn(LD_MDR),
+								 .Reset(Reset_ah),
+								 .Din(MDR_MUX_OUT),
+								 .Dout(MDR));
 			 
 // MUXes:--------------------------------------------------
 // PC MUX
-PC_MUX pc_mux(.Input0(BUS),			// from BUS
-				  .Input1(),				// from +
-				  .Input2(PC_PLUS_ONE)	// from PC + 1
+MUX_PC pc_mux(.Din0(BUS),			// from BUS
+				  .Din1(),				// from +
+				  .Din2(PC_PLUS_ONE),	// from PC + 1
 				  .Select(PCMUX),
-				  .Out(PC_MUX_OUT));
+				  .Dout(PC_MUX_OUT));
 				  
 // MDR MUX:
-MDR_MUX mdr_mux(.Input0(BUS),
-					 .Input1(MDR_IN),
+MUX_MDR mdr_mux(.Din0(BUS),
+					 .Din1(MDR_IN),
 					 .Select(MIO_EN),
-					 .OUT(MDR_MUX_OUT));
+					 .Dout(MDR_MUX_OUT));
 				  
 // Gate MUX (4 to 1), Gate MarMUX, Gate PC, Gate ALU, Gate MDR
-Gate_MUX gate_mux(.Input0(MAR),	// output from MAR
-						.Input1(PC),	// output from PC
-						.Input2(),		// ALU OUTPUT *NOT IN WEEK1*
-						.Input3(MDR),	// output from MDR
+MUX_GATE gate_mux(.Din0(MAR),	// output from MAR
+						.Din1(PC),	// output from PC
+						.Din2(),		// ALU OUTPUT *NOT IN WEEK1*
+						.Din3(MDR),	// output from MDR
 						.Select({GateMARMUX,GatePC,GateALU,GateMDR}),
-						.OUT(BUS));		// output to BUS
+						.Dout(BUS));		// output to BUS
 			
 			
 // Our SRAM and I/O controller

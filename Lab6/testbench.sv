@@ -25,7 +25,7 @@ wire [15:0] Data;
 
 // Instantiating 
 // Make sure the module and signal names match with those in your design
-slc3 processor0(.*);	
+lab6_toplevel CPU(.*);	
 
 // Toggle the clock
 // #1 means wait for a delay of 1 timeunit
@@ -52,12 +52,28 @@ S = 16'b0000000000000011;
 #2 Run = 0;	
    
 #2 Run = 1;
-/*
+
 #60 Continue = 0;
 #2 Continue = 1;
 #60 Continue = 0;
 #2 Continue = 1;
-*/
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+//#60 Continue = 0;
+//#2 Continue = 1;
+
 #100 S = 16'b0000000000000001;
 
 #100 S = 16'b0000000000000010;

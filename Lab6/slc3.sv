@@ -41,7 +41,7 @@ logic [1:0] PCMUX, ADDR2MUX, ALUK;
 logic DRMUX, SR1MUX, SR2MUX, ADDR1MUX;
 logic MIO_EN;
 
-logic PC_PLUS_ONE;
+//logic PC_PLUS_ONE;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;	
 logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, BUS; 	// MUX_OUTPUTs & BUS
@@ -86,7 +86,7 @@ sixteen_register PC_reg(.Clk,
 								.Din(PC_MUX_OUT),
 								.Dout(PC));
 
-assign PC_PLUS_ONE = PC + 16'h0001;
+//assign PC_PLUS_ONE = PC + 16'h0001;
 
 // MDR:
 sixteen_register MDR_reg(.Clk,
@@ -110,9 +110,9 @@ sixteen_register IR_reg(.Clk,
 								
 // MUXes:--------------------------------------------------
 // PC MUX
-MUX_PC pc_mux(.Din0(BUS),			// from BUS
+MUX_PC pc_mux(.Din0(PC + 1),			// from PC + 1
 				  .Din1(),				// from +
-				  .Din2(PC_PLUS_ONE),	// from PC + 1
+				  .Din2(BUS),				// from BUS
 				  .Select(PCMUX),
 				  .Dout(PC_MUX_OUT));
 				  

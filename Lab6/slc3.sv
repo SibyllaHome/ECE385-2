@@ -44,7 +44,7 @@ logic MIO_EN;
 logic PC_PLUS_ONE;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;	
-logic [15:0] PC_MUX_OUT, BUS; 	// MUX_OUTPUTs & BUS
+logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, BUS; 	// MUX_OUTPUTs & BUS
 logic [15:0] Data_from_SRAM, Data_to_SRAM;
 
 // Signals being displayed on hex display
@@ -84,9 +84,9 @@ sixteen_register PC_reg(.Clk,
 								.LoadEn(LD_PC),
 								.Reset(Reset_ah),
 								.Din(PC_MUX_OUT),
-								.Dout(BUS));
+								.Dout(PC));
 
-assign PC_PLUS_ONE = PC + 1'b1;
+assign PC_PLUS_ONE = PC + 16'b0000000000000001;
 
 
 sixteen_register MDR_reg(.Clk,
@@ -105,7 +105,7 @@ MUX_PC pc_mux(.Din0(BUS),			// from BUS
 				  
 // MDR MUX:
 MUX_MDR mdr_mux(.Din0(BUS),
-					 .Din1(MDR_IN),
+					 .Din1(MDR_In),
 					 .Select(MIO_EN),
 					 .Dout(MDR_MUX_OUT));
 				  

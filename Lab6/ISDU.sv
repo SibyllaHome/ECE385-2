@@ -55,7 +55,7 @@ module ISDU (   input logic         Clk,
 									Mem_WE
 				);
 
-	enum logic [3:0] {  Halted,
+	enum logic [4:0] {  Halted,
 						LED_PAUSE,
 						S_18, 
 						S_33_1, 
@@ -200,8 +200,12 @@ module ISDU (   input logic         Clk,
 				Next_state = S_27;
 			S_27 :
 				Next_state = S_18;
+			LED_PAUSE :
+				if(Continue)
+					Next_state = S_18;
+				else
+					Next_state = LED_PAUSE;
 			
-
 			// You need to finish the rest of states.....
 
 			default : ;
@@ -273,7 +277,7 @@ module ISDU (   input logic         Clk,
 				begin
 					ADDR2MUX = 2'b01; //IR[8:0]
 					ADDR1MUX = 1'b1;
-					PCMUX = 2b'01；    //add
+					PCMUX = 2'b01;   //add
 					LD_PC = 1'b1;
 				end
 				
@@ -354,7 +358,10 @@ module ISDU (   input logic         Clk,
 					LD_CC = 1'b1;
 					GateMDR = 1'b1;
 				end
-				
+			LED_PAUSE:
+				begin
+					LD_LED = 1'b1;
+				end
 			// You need to finish the rest of states.....
 
 			default : ;

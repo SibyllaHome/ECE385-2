@@ -34,7 +34,7 @@ assign Continue_ah = ~Continue;
 assign Run_ah = ~Run;
 
 // Internal connections
-logic BEN;
+logic BEN, N, Z, P, n, z, p;
 logic LD_MAR, LD_MDR, LD_IR, LD_BEN, LD_CC, LD_REG, LD_PC, LD_LED;
 logic GatePC, GateMDR, GateALU, GateMARMUX;
 logic [1:0] PCMUX, ADDR2MUX, ALUK;
@@ -45,13 +45,13 @@ logic MIO_EN;
 logic [2:0]  SR1_MUX_OUT, DR_MUX_OUT;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;	
-logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, ADDR2_MUX_OUT, ADDR1_MUX_OUT, SR1_OUT, SR2_OUT, BUS; 	// MUX_OUTPUTs & BUS
+logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, ADDR2_MUX_OUT, ADDR1_MUX_OUT, SR2_MUX_OUT, SR1_OUT, SR2_OUT, ALU_OUT, BUS; 	// MUX_OUTPUTs & BUS
 logic [15:0] Data_from_SRAM, Data_to_SRAM;
 
 // Signals being displayed on hex display
 logic [3:0][3:0] hex_4;
 
-logic [15:0] SEXT5, SEXT6, SEXT9, SEXT11;
+logic [15:0] SEXT_5, SEXT_6, SEXT_9, SEXT_11;
 
 //// For week 1, hexdrivers will display IR. Comment out these in week 2.
 //HexDriver hex_driver3 (IR[15:12], HEX3);
@@ -76,7 +76,6 @@ HexDriver hex_driver4 (PC[3:0], HEX4);
 // input into MDR)
 assign ADDR = { 4'b00, MAR }; //Note, our external SRAM chip is 1Mx16, but address space is only 64Kx16
 assign MIO_EN = ~OE;
-
 // You need to make your own datapath module and connect everything to the datapath
 // Be careful about whether Reset is active high or low
 // datapath d0 (/* Please fill in the signals.... */);
@@ -128,7 +127,7 @@ MUX_MDR mdr_mux(.Din0(BUS),
 // Gate MUX (4 to 1), Gate MarMUX, Gate PC, Gate ALU, Gate MDR
 MUX_GATE gate_mux(.Din0(MAR),											// output from MAR
 						.Din1(PC),											// output from PC
-						.Din2(ADDR2_MUX_OUT + ADDR1_MUX_OUT),		// addr2 + addr1
+						.Din2(ALU_OUT),									// output from ALU
 						.Din3(MDR),											// output from MDR
 						.Select({GateMARMUX,GatePC,GateALU,GateMDR}),
 						.Dout(BUS));										// output to BUS
@@ -144,7 +143,7 @@ ADDR2MUX addr2_mux(.Din0(SEXT_11),
 			
 // ADDR1 MUX (using parameterized module)
 mux2 #(16) addr1_mux(.Din0(SR1_OUT), // select 0
-							.Din1(SR2_OUT), // select 1
+							.Din1(PC), 		 // select 1
 							.Select(ADDR1MUX),
 							.Dout(ADDR1_MUX_OUT));
 			
@@ -156,8 +155,13 @@ mux2 #(3) sr1_mux(.Din0(IR[11:9]), // select 0
 // DR MUX
 mux2 #(3) dr_mux(.Din0(3'b111), 		// select 0
 					  .Din1(IR[11:9]), 	// select 1
-					  .Select(DR_MUX),
+					  .Select(DRMUX),
 					  .Dout(DR_MUX_OUT));
+// SR2 MUX
+mux2 #(16) sr2_mux(.Din0(SEXT_5),
+						 .Din1(SR2_OUT),
+						 .Select(SR2MUX),
+						 .Dout(SR2_MUX_OUT));  // USE FOR ALU INPUT : SR2_MUX_OUT
 			
 // SEXT modules:--------------------------------------------
 sext_input5 sext_5(.IN(IR[4:0]),
@@ -176,12 +180,59 @@ REG_FILE reg_file(.Clk,
 						.LD_REG,
 						.Reset(Reset_ah),
 						.FROM_DR_MUX(DR_MUX_OUT),
-						.FROM_SR1(SR1_MUX_OUT),
-						.FROM_SR2(SR2_OUT),						// FROM WHEREEEE?
+						.FROM_SR1(SR1_MUX_OUT),			
+						.FROM_SR2(IR[2:0]),				// FROM SR2
 						.FROM_BUS(BUS),
-						.SR1_OUT,
+						.SR1_OUT,							// USE FOR ALU INPUT : SR1_OUT
 						.SR2_OUT);
-			
+
+// ALU:-------------------------------------------------------
+ALU alu(.A(SR1_OUT),
+		  .B(SR2_MUX_OUT),
+		  .Select(ALUK),
+		  .Dout(ALU_OUT));
+
+		  
+		  
+// LOGIC AND NZP :--------------------------------------------
+NZP nzp(.*,
+		  .Nin(N),.Zin(Z),.Pin(P),
+		  .Nout(n),.Zout(z),.Pout(p));	
+
+BEN ben(.Clk,.LD_BEN,
+		  .n, .z, .p,
+		  .ben(BEN)); 
+// logic from BUS
+always_comb
+begin
+ if(BUS[15])
+ begin
+  N = 1'b1;
+  Z = 1'b0;
+  P = 1'b0;
+ end
+ else if(BUS == 16'b0)
+ begin
+  N = 1'b0;
+  Z = 1'b1;
+  P = 1'b0;
+ end
+ else 
+ begin
+  N = 1'b0;
+  Z = 1'b0;
+  P = 1'b1;
+ end
+end
+
+always_ff @ (posedge Clk)
+begin
+	if(LD_LED)
+		LED <= IR[11:0];
+	else
+		LED <= 12'b0;
+end
+
 // Our SRAM and I/O controller
 Mem2IO memory_subsystem(
     .*, .Reset(Reset_ah), .ADDR(ADDR), .Switches(S),

@@ -15,8 +15,9 @@ module sixteen_register (input  logic Clk, LoadEn, Reset,
 endmodule
 
 module REG_FILE(input logic Clk, LD_REG, Reset,
-					 input logic [2:0] FROM_DR_MUX, FROM_SR1, FROM_SR2, FROM_SR1,
-					 output logic [15:0] FROM_BUS, SR1_OUT, SR2_OUT);
+					 input logic [2:0] FROM_DR_MUX, FROM_SR1, FROM_SR2,
+					 input logic [15:0] FROM_BUS,
+					 output logic [15:0] SR1_OUT, SR2_OUT);
 					 
 					 logic [7:0][15:0] Registers;
 					 
@@ -24,13 +25,13 @@ module REG_FILE(input logic Clk, LD_REG, Reset,
 					 begin
 								if(~Reset)
 								begin
-										Registers[0] <= 16h'0;
-										Registers[2] <= 16h'0;
-										Registers[3] <= 16h'0;
-										Registers[4] <= 16h'0;
-										Registers[5] <= 16h'0;
-										Registers[6] <= 16h'0;
-										Registers[7] <= 16h'0;
+										Registers[0] <= 16'b0;
+										Registers[2] <= 16'b0;
+										Registers[3] <= 16'b0;
+										Registers[4] <= 16'b0;
+										Registers[5] <= 16'b0;
+										Registers[6] <= 16'b0;
+										Registers[7] <= 16'b0;
 								end
 								else if(LD_REG)
 									case(FROM_DR_MUX)
@@ -72,7 +73,25 @@ module REG_FILE(input logic Clk, LD_REG, Reset,
 												default:;
 							endcase
 					end
-							
+endmodule
 
-					 
+module BEN(input logic Clk,
+			  input logic LD_BEN,
+			  input logic n, z, p,
+			  input logic [2:0] FROM_IR,
+			  output logic ben);	
+			
+			always_ff @ (posedge Clk)
+			begin
+			if(LD_BEN)
+				ben <= (FROM_IR[2] & n) + (FROM_IR[1] & z) + (FROM_IR[0] & p);
+			end
+endmodule
+	  
+			  
+			  
+			  
+			  
+			  
+		
 	

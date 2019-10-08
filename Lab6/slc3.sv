@@ -42,25 +42,28 @@ logic DRMUX, SR1MUX, SR2MUX, ADDR1MUX;
 logic MIO_EN;
 
 //logic PC_PLUS_ONE;
+logic [2:0]  SR1_MUX_OUT, DR_MUX_OUT;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;	
-logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, BUS; 	// MUX_OUTPUTs & BUS
+logic [15:0] PC_MUX_OUT, MDR_MUX_OUT, ADDR2_MUX_OUT, ADDR1_MUX_OUT, SR1_OUT, SR2_OUT, BUS; 	// MUX_OUTPUTs & BUS
 logic [15:0] Data_from_SRAM, Data_to_SRAM;
 
 // Signals being displayed on hex display
 logic [3:0][3:0] hex_4;
 
-// For week 1, hexdrivers will display IR. Comment out these in week 2.
-HexDriver hex_driver3 (IR[15:12], HEX3);
-HexDriver hex_driver2 (IR[11:8], HEX2);
-HexDriver hex_driver1 (IR[7:4], HEX1);
-HexDriver hex_driver0 (IR[3:0], HEX0);
+logic [15:0] SEXT5, SEXT6, SEXT9, SEXT11;
+
+//// For week 1, hexdrivers will display IR. Comment out these in week 2.
+//HexDriver hex_driver3 (IR[15:12], HEX3);
+//HexDriver hex_driver2 (IR[11:8], HEX2);
+//HexDriver hex_driver1 (IR[7:4], HEX1);
+//HexDriver hex_driver0 (IR[3:0], HEX0);
 
 // For week 2, hexdrivers will be mounted to Mem2IO
-// HexDriver hex_driver3 (hex_4[3][3:0], HEX3);
-// HexDriver hex_driver2 (hex_4[2][3:0], HEX2);
-// HexDriver hex_driver1 (hex_4[1][3:0], HEX1);
-// HexDriver hex_driver0 (hex_4[0][3:0], HEX0);
+ HexDriver hex_driver3 (hex_4[3][3:0], HEX3);
+ HexDriver hex_driver2 (hex_4[2][3:0], HEX2);
+ HexDriver hex_driver1 (hex_4[1][3:0], HEX1);
+ HexDriver hex_driver0 (hex_4[0][3:0], HEX0);
 
 // The other hex display will show PC for both weeks.
 HexDriver hex_driver7 (PC[15:12], HEX7);
@@ -110,9 +113,9 @@ sixteen_register IR_reg(.Clk,
 								
 // MUXes:--------------------------------------------------
 // PC MUX
-MUX_PC pc_mux(.Din0(PC + 1),			// from PC + 1
-				  .Din1(),				// from +
-				  .Din2(BUS),				// from BUS
+MUX_PC pc_mux(.Din0(BUS),									// from PC + 1
+				  .Din1(ADDR2_MUX_OUT + ADDR1_MUX_OUT),// from addr2 + addr1
+				  .Din2(PC + 1),								// from BUS
 				  .Select(PCMUX),
 				  .Dout(PC_MUX_OUT));
 				  
@@ -123,13 +126,61 @@ MUX_MDR mdr_mux(.Din0(BUS),
 					 .Dout(MDR_MUX_OUT));
 				  
 // Gate MUX (4 to 1), Gate MarMUX, Gate PC, Gate ALU, Gate MDR
-MUX_GATE gate_mux(.Din0(MAR),	// output from MAR
-						.Din1(PC),	// output from PC
-						.Din2(),		// ALU OUTPUT *NOT IN WEEK1*
-						.Din3(MDR),	// output from MDR
+MUX_GATE gate_mux(.Din0(MAR),											// output from MAR
+						.Din1(PC),											// output from PC
+						.Din2(ADDR2_MUX_OUT + ADDR1_MUX_OUT),		// addr2 + addr1
+						.Din3(MDR),											// output from MDR
 						.Select({GateMARMUX,GatePC,GateALU,GateMDR}),
-						.Dout(BUS));		// output to BUS
+						.Dout(BUS));										// output to BUS
+	
+	
+// ADDR2 MUX
+ADDR2MUX addr2_mux(.Din0(SEXT_11),
+						 .Din1(SEXT_9 ),
+						 .Din2(SEXT_6 ),
+					 // .The last input is all 0
+						 .Select(ADDR2MUX),
+						 .Dout(ADDR2_MUX_OUT));
 			
+// ADDR1 MUX (using parameterized module)
+mux2 #(16) addr1_mux(.Din0(SR1_OUT), // select 0
+							.Din1(SR2_OUT), // select 1
+							.Select(ADDR1MUX),
+							.Dout(ADDR1_MUX_OUT));
+			
+// SR1 MUX
+mux2 #(3) sr1_mux(.Din0(IR[11:9]), // select 0
+						.Din1(IR[8:6]),  // select 1
+						.Select(SR1MUX),
+						.Dout(SR1_MUX_OUT));
+// DR MUX
+mux2 #(3) dr_mux(.Din0(3'b111), 		// select 0
+					  .Din1(IR[11:9]), 	// select 1
+					  .Select(DR_MUX),
+					  .Dout(DR_MUX_OUT));
+			
+// SEXT modules:--------------------------------------------
+sext_input5 sext_5(.IN(IR[4:0]),
+						 .OUT(SEXT_5));
+
+sext_input6 sext_6(.IN(IR[5:0]),
+						 .OUT(SEXT_6));
+
+sext_input9 sext_9(.IN(IR[8:0]),
+						 .OUT(SEXT_9));
+
+sext_input11 sext_11(.IN(IR[10:0]),
+							.OUT(SEXT_11));
+// REG FILES:------------------------------------------------
+REG_FILE reg_file(.Clk,
+						.LD_REG,
+						.Reset(Reset_ah),
+						.FROM_DR_MUX(DR_MUX_OUT),
+						.FROM_SR1(SR1_MUX_OUT),
+						.FROM_SR2(SR2_OUT),						// FROM WHEREEEE?
+						.FROM_BUS(BUS),
+						.SR1_OUT,
+						.SR2_OUT);
 			
 // Our SRAM and I/O controller
 Mem2IO memory_subsystem(

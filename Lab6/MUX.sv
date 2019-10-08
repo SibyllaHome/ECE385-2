@@ -63,3 +63,45 @@ module MUX_GATE (input logic [15:0] Din0, Din1, Din2, Din3,
 	
 endmodule
 
+module ADDR2MUX(input logic [15:0] Din0, Din1, Din2,
+					 input logic [1:0] Select,
+					 output logic [15:0] Dout);
+					 
+	always_comb
+	begin
+		case(Select)
+			
+			2'b00:	Dout = Din0;
+			2'b01:	Dout = Din1;
+			2'b10:	Dout = Din2;
+			2'b11:	Dout = 16'b0000000000000000;
+		
+		endcase
+	end
+
+endmodule
+
+
+module mux2 #(parameter width)
+					(input logic [width - 1:0] Din0, Din1,
+					input logic Select,
+					output logic [width - 1:0] Dout);
+					
+	always_comb
+	begin
+		case(Select)
+			
+			1'b0:		Dout = Din0;
+			
+			1'b1:		Dout = Din1;
+			
+		endcase
+		
+	end
+	
+endmodule
+	
+	
+	
+	
+	

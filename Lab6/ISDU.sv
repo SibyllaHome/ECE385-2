@@ -178,6 +178,8 @@ module ISDU (   input logic         Clk,
 					Next_state = S_22; // can be 22 then to 18, or 18
 				else
 					Next_state = S_18;
+			S_22 :
+				Next_state = S_18;
 			S_12 :
 				Next_state = S_18;
 			S_04 :
@@ -223,7 +225,7 @@ module ISDU (   input logic         Clk,
 					LD_PC = 1'b1;
 				end
 			S_33_1 : //MDR<-M(MAR)
-				Mem_OE = 1'b0;
+					Mem_OE = 1'b0;
 			S_33_2 : //MDR<-M(MAR)
 				begin 
 					Mem_OE = 1'b0;
@@ -335,7 +337,7 @@ module ISDU (   input logic         Clk,
 			S_06 : // MAR<-B+off6
 				begin
 					SR1MUX = 1'b1;
-					ADDR1MUX = 1'b1;
+					ADDR1MUX = 1'b0;
 					ADDR2MUX = 2'b10;
 					GateMARMUX = 1'b1;
 					LD_MAR = 1'b1;
@@ -354,6 +356,7 @@ module ISDU (   input logic         Clk,
 				
 			S_27: //DR<-MDR, set CC
 				begin
+					DRMUX = 1'b0;
 					LD_REG = 1'b1;
 					LD_CC = 1'b1;
 					GateMDR = 1'b1;

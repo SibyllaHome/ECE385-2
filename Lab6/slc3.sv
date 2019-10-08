@@ -114,7 +114,7 @@ sixteen_register IR_reg(.Clk,
 // PC MUX
 MUX_PC pc_mux(.Din0(BUS),									// from PC + 1
 				  .Din1(ADDR2_MUX_OUT + ADDR1_MUX_OUT),// from addr2 + addr1
-				  .Din2(PC + 1),								// from BUS
+				  .Din2(PC + 1'b1),								// from BUS
 				  .Select(PCMUX),
 				  .Dout(PC_MUX_OUT));
 				  
@@ -125,7 +125,7 @@ MUX_MDR mdr_mux(.Din0(BUS),
 					 .Dout(MDR_MUX_OUT));
 				  
 // Gate MUX (4 to 1), Gate MarMUX, Gate PC, Gate ALU, Gate MDR
-MUX_GATE gate_mux(.Din0(MAR),											// output from MAR
+MUX_GATE gate_mux(.Din0(ADDR2_MUX_OUT + ADDR1_MUX_OUT),		// output from MAR
 						.Din1(PC),											// output from PC
 						.Din2(ALU_OUT),									// output from ALU
 						.Din3(MDR),											// output from MDR
@@ -153,8 +153,8 @@ mux2 #(3) sr1_mux(.Din0(IR[11:9]), // select 0
 						.Select(SR1MUX),
 						.Dout(SR1_MUX_OUT));
 // DR MUX
-mux2 #(3) dr_mux(.Din0(3'b111), 		// select 0
-					  .Din1(IR[11:9]), 	// select 1
+mux2 #(3) dr_mux(.Din0(IR[11:9]), 		// select 0
+					  .Din1(3'b111), 	// select 1
 					  .Select(DRMUX),
 					  .Dout(DR_MUX_OUT));
 // SR2 MUX
@@ -199,7 +199,7 @@ NZP nzp(.*,
 		  .Nin(N),.Zin(Z),.Pin(P),
 		  .Nout(n),.Zout(z),.Pout(p));	
 
-BEN ben(.Clk,.LD_BEN,
+BEN ben(.Clk,.LD_BEN,.FROM_IR(IR[11:9]),
 		  .n, .z, .p,
 		  .ben(BEN)); 
 // logic from BUS

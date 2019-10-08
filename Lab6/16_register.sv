@@ -21,11 +21,12 @@ module REG_FILE(input logic Clk, LD_REG, Reset,
 					 
 					 logic [7:0][15:0] Registers;
 					 
-					 always_ff @ (posedge Clk)
+					 always_ff @ (posedge Clk )
 					 begin
-								if(~Reset)
+								if(Reset)
 								begin
 										Registers[0] <= 16'b0;
+										Registers[1] <= 16'b0;
 										Registers[2] <= 16'b0;
 										Registers[3] <= 16'b0;
 										Registers[4] <= 16'b0;
@@ -50,26 +51,26 @@ module REG_FILE(input logic Clk, LD_REG, Reset,
 					always_comb
 					begin
 							case(FROM_SR1)
-												3'b000 : SR1_OUT <= Registers[0];
-												3'b001 :	SR1_OUT <= Registers[1];
-												3'b010 : SR1_OUT <= Registers[2];
-												3'b011 : SR1_OUT <= Registers[3];
-												3'b100 : SR1_OUT <= Registers[4];
-												3'b101 : SR1_OUT <= Registers[5];
-												3'b110 : SR1_OUT <= Registers[6];
-												3'b111 : SR1_OUT <= Registers[7];
+												3'b000 : SR1_OUT = Registers[0];
+												3'b001 :	SR1_OUT = Registers[1];
+												3'b010 : SR1_OUT = Registers[2];
+												3'b011 : SR1_OUT = Registers[3];
+												3'b100 : SR1_OUT = Registers[4];
+												3'b101 : SR1_OUT = Registers[5];
+												3'b110 : SR1_OUT = Registers[6];
+												3'b111 : SR1_OUT = Registers[7];
 												default:;
 							endcase
 							
 							case(FROM_SR2)
-												3'b000 : SR2_OUT <= Registers[0];
-												3'b001 :	SR2_OUT <= Registers[1];
-												3'b010 : SR2_OUT <= Registers[2];
-												3'b011 : SR2_OUT <= Registers[3];
-												3'b100 : SR2_OUT <= Registers[4];
-												3'b101 : SR2_OUT <= Registers[5];
-												3'b110 : SR2_OUT <= Registers[6];
-												3'b111 : SR2_OUT <= Registers[7];
+												3'b000 : SR2_OUT = Registers[0];
+												3'b001 :	SR2_OUT = Registers[1];
+												3'b010 : SR2_OUT = Registers[2];
+												3'b011 : SR2_OUT = Registers[3];
+												3'b100 : SR2_OUT = Registers[4];
+												3'b101 : SR2_OUT = Registers[5];
+												3'b110 : SR2_OUT = Registers[6];
+												3'b111 : SR2_OUT = Registers[7];
 												default:;
 							endcase
 					end

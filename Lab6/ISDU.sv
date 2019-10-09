@@ -69,7 +69,7 @@ module ISDU (   input logic         Clk,
 						S_12, 						// JMP
 						S_04, S_21,					// JSR
 						S_07,	S_23,	S_16_1, S_16_2, 		// STR
-						S_06, S_25_1, S_25_2, S_27			// LDR
+						S_06, S_25_1, S_25_2, S_27, Manual_Pause1, Manual_Pause2			// LDR
 						}   State, Next_state;   // Internal state logic
 		
 	always_ff @ (posedge Clk)
@@ -116,9 +116,22 @@ module ISDU (   input logic         Clk,
 		unique case (State)
 			Halted : 
 				if (Run) 
-					Next_state = S_18;                      
+					Next_state = S_18;
+					
+			Manual_Pause1:
+				if(~Continue)
+					Next_state = Manual_Pause1;
+				else
+					Next_state = Manual_Pause2;
+			Manual_Pause2:
+				if(Continue)
+					Next_state = Manual_Pause2;
+				else
+					Next_state = S_33_1;
+					
 			S_18 : 
-				Next_state = S_33_1;
+				Next_state = Manual_Pause1;
+
 			// Any states involving SRAM require more than one clock cycles.
 			// The exact number will be discussed in lecture.
 			S_33_1 : 
@@ -223,16 +236,37 @@ module ISDU (   input logic         Clk,
 					LD_MAR = 1'b1;
 					PCMUX = 2'b10;
 					LD_PC = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
+				end
+			Manual_Pause1:
+				begin
+				Mem_OE = 1'b1;
+				Mem_WE = 1'b1;
+				end
+			Manual_Pause2:
+				begin
+				Mem_OE = 1'b1;
+				Mem_WE = 1'b1;
 				end
 			S_33_1 : //MDR<-M(MAR)
+				begin
 					Mem_OE = 1'b0;
+					Mem_WE = 1'b1;
+				end
 			S_33_2 : //MDR<-M(MAR)
 				begin 
 					Mem_OE = 1'b0;
+					Mem_WE = 1'b1;
+					
 					LD_MDR = 1'b1;
 				end
 			S_35 : //IR<-MDR
 				begin 
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
+					
 					GateMDR = 1'b1;
 					LD_IR = 1'b1;
 				end
@@ -249,6 +283,9 @@ module ISDU (   input logic         Clk,
 					GateALU = 1'b1;
 					LD_REG = 1'b1;
 					LD_CC = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_05 : //AND DR<-SR1 & OP2, set CC
@@ -259,6 +296,9 @@ module ISDU (   input logic         Clk,
 					GateALU = 1'b1;
 					LD_REG = 1'b1;
 					LD_CC = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_09 :	//NOT DR<-NOT(SR), set CC
@@ -268,11 +308,15 @@ module ISDU (   input logic         Clk,
 					GateALU = 1'b1;
 					LD_REG = 1'b1;
 					LD_CC = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_00 : //BEN
 				begin
-					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_22 : //PC<-PC+off9
@@ -281,6 +325,9 @@ module ISDU (   input logic         Clk,
 					ADDR1MUX = 1'b1;
 					PCMUX = 2'b01;   //add
 					LD_PC = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_12 : //PC<-BaseR
@@ -290,6 +337,9 @@ module ISDU (   input logic         Clk,
 					PCMUX = 2'b01;
 					ADDR1MUX = 1'b0;
 					ADDR2MUX = 2'b11;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_04 : //R7<-PC
@@ -297,6 +347,9 @@ module ISDU (   input logic         Clk,
 					GatePC = 1'b1;
 					DRMUX = IR_11;
 					LD_REG = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_21 : //PC<-PC+off11
@@ -305,6 +358,9 @@ module ISDU (   input logic         Clk,
 					ADDR2MUX = 2'b00;
 					ADDR1MUX = 1'b1;
 					PCMUX = 2'b01;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_07 : //MAR<-B+off6
@@ -314,6 +370,9 @@ module ISDU (   input logic         Clk,
 					ADDR2MUX = 2'b10;
 					GateMARMUX = 1'b1;
 					LD_MAR = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_23 : // MDR<-SR
@@ -322,10 +381,14 @@ module ISDU (   input logic         Clk,
 					ALUK = 2'b11; // pass
 					GateALU = 1'b1;
 					LD_MDR = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_16_1 : // M[MAR]<-MDR
 				begin
+					Mem_OE = 1'b1;
 					Mem_WE = 1'b0;
 				end
 				
@@ -341,16 +404,21 @@ module ISDU (   input logic         Clk,
 					ADDR2MUX = 2'b10;
 					GateMARMUX = 1'b1;
 					LD_MAR = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 				
 			S_25_1: //MDR<-M[MAR]
 				begin
 					Mem_OE = 1'b0;
+					Mem_WE = 1'b1;
 				end
 				
 			S_25_2 :
 				begin
 					Mem_OE = 1'b0;
+					Mem_WE = 1'b1;
 					LD_MDR = 1'b1;
 				end
 				
@@ -360,18 +428,32 @@ module ISDU (   input logic         Clk,
 					LD_REG = 1'b1;
 					LD_CC = 1'b1;
 					GateMDR = 1'b1;
+					
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
-			LED_PAUSE:
+			LED_PAUSE1:
 				begin
 					LD_LED = 1'b1;
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
+				end
+			LED_PAUSE2;
+				begin
+					Mem_OE = 1'b1;
+					Mem_WE = 1'b1;
 				end
 			// You need to finish the rest of states.....
 
-			default : ;
+			default :
+			begin
+				Mem_OE = 1'b1;
+				Mem_WE = 1'b1;
+			end
+			
 		endcase
 	end 
 
-	 // These should always be active
 	assign Mem_CE = 1'b0;
 	assign Mem_UB = 1'b0;
 	assign Mem_LB = 1'b0;

@@ -112,8 +112,8 @@ sixteen_register IR_reg(.Clk,
 								
 // MUXes:--------------------------------------------------
 // PC MUX
-MUX_PC pc_mux(.Din0(BUS),									// from PC + 1
-				  .Din1(ADDR2_MUX_OUT + ADDR1_MUX_OUT),// from addr2 + addr1
+MUX_PC pc_mux(.Din0(BUS),										// from PC + 1
+				  .Din1(ADDR2_MUX_OUT + ADDR1_MUX_OUT),	// from addr2 + addr1
 				  .Din2(PC + 1'b1),								// from BUS
 				  .Select(PCMUX),
 				  .Dout(PC_MUX_OUT));

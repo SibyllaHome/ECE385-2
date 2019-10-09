@@ -10,7 +10,6 @@ logic Clk = 0;
 logic Reset, Run, Continue;
 logic [15:0] S;
 logic [11:0] LED;
-logic [15:0] IR;
 logic [6:0]  HEX0,
 				 HEX1,
 				 HEX2,
@@ -53,6 +52,23 @@ Continue = 1;
    
 #2 Run = 1;
 
+#60 Continue = 0;
+#2 Continue = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
 //#60 Continue = 0;
 //#2 Continue = 1;
 //#60 Continue = 0;

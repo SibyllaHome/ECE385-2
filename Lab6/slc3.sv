@@ -158,8 +158,8 @@ mux2 #(3) dr_mux(.Din0(IR[11:9]), 		// select 0
 					  .Select(DRMUX),
 					  .Dout(DR_MUX_OUT));
 // SR2 MUX
-mux2 #(16) sr2_mux(.Din0(SEXT_5),
-						 .Din1(SR2_OUT),
+mux2 #(16) sr2_mux(.Din0(SR2_OUT),
+						 .Din1(SEXT_5),
 						 .Select(SR2MUX),
 						 .Dout(SR2_MUX_OUT));  // USE FOR ALU INPUT : SR2_MUX_OUT
 			

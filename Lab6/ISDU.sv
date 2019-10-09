@@ -118,16 +118,16 @@ module ISDU (   input logic         Clk,
 				if (Run) 
 					Next_state = S_18;
 					
-			Manual_Pause1:
-				if(~Continue)
-					Next_state = Manual_Pause1;
-				else
-					Next_state = Manual_Pause2;
-			Manual_Pause2:
-				if(Continue)
-					Next_state = Manual_Pause2;
-				else
-					Next_state = S_33_1;
+//			Manual_Pause1:
+//				if(~Continue)
+//					Next_state = Manual_Pause1;
+//				else
+//					Next_state = Manual_Pause2;
+//			Manual_Pause2:
+//				if(Continue)
+//					Next_state = Manual_Pause2;
+//				else
+//					Next_state = S_33_1;
 					
 			S_18 : 
 				Next_state = S_33_1;
@@ -216,12 +216,12 @@ module ISDU (   input logic         Clk,
 			S_27 :
 				Next_state = S_18;
 			LED_PAUSE1 :
-				if(Continue)
+				if(~Continue)
 					Next_state = LED_PAUSE1;
 				else
 					Next_state = LED_PAUSE2;
 			LED_PAUSE2 :
-				if(~Continue)
+				if(Continue)
 					Next_state = LED_PAUSE2;
 				else
 					Next_state = S_18;
@@ -327,7 +327,7 @@ module ISDU (   input logic         Clk,
 			S_22 : //PC<-PC+off9
 				begin
 					ADDR2MUX = 2'b01; //IR[8:0]
-					ADDR1MUX = 1'b1;
+					ADDR1MUX = 1'b1;	//PC
 					PCMUX = 2'b01;   //add
 					LD_PC = 1'b1;
 					
@@ -361,7 +361,7 @@ module ISDU (   input logic         Clk,
 				begin
 					LD_PC = 1'b1;
 					ADDR2MUX = 2'b00;
-					ADDR1MUX = 1'b1;
+					ADDR1MUX = 1'b1; //PC
 					PCMUX = 2'b01;
 					
 					Mem_OE = 1'b1;

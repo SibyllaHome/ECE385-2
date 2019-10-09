@@ -52,25 +52,25 @@ Continue = 1;
    
 #2 Run = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 
-#60 Continue = 0;
+#200 Continue = 0;
 #2 Continue = 1;
 //#60 Continue = 0;
 //#2 Continue = 1;

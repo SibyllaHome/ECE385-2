@@ -46,11 +46,14 @@ Run = 1;
 Continue = 1;
 #2 Reset = 1;
 
-#2 S = 16'b0000000000000011;
+#2 S = 16'b0000000000001011;
 
 #2 Run = 0;	
    
 #2 Run = 1;
+
+#60 Continue = 0;
+#2 Continue = 1;
 
 #60 Continue = 0;
 #2 Continue = 1;

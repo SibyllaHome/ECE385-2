@@ -56,7 +56,7 @@ module ISDU (   input logic         Clk,
 				);
 
 	enum logic [4:0] {  Halted,
-						LED_PAUSE,
+						LED_PAUSE1,LED_PAUSE2,
 						S_18, 
 						S_33_1, 
 						S_33_2, 
@@ -130,7 +130,7 @@ module ISDU (   input logic         Clk,
 					Next_state = S_33_1;
 					
 			S_18 : 
-				Next_state = Manual_Pause1;
+				Next_state = S_33_1;
 
 			// Any states involving SRAM require more than one clock cycles.
 			// The exact number will be discussed in lecture.
@@ -171,7 +171,7 @@ module ISDU (   input logic         Clk,
 					4'b0110 :						// LDR
 						Next_state = S_06;		
 					4'b1101 :						// Pause for LED
-						Next_state = LED_PAUSE;
+						Next_state = LED_PAUSE1;
 						
 						
 					// You need to finish the rest of opcodes.....
@@ -215,11 +215,16 @@ module ISDU (   input logic         Clk,
 				Next_state = S_27;
 			S_27 :
 				Next_state = S_18;
-			LED_PAUSE :
+			LED_PAUSE1 :
 				if(Continue)
-					Next_state = S_18;
+					Next_state = LED_PAUSE1;
 				else
-					Next_state = LED_PAUSE;
+					Next_state = LED_PAUSE2;
+			LED_PAUSE2 :
+				if(~Continue)
+					Next_state = LED_PAUSE2;
+				else
+					Next_state = S_18;
 			
 			// You need to finish the rest of states.....
 
@@ -394,6 +399,7 @@ module ISDU (   input logic         Clk,
 				
 			S_16_2 :
 				begin
+					Mem_OE = 1'b1;
 					Mem_WE = 1'b0;
 				end
 				
@@ -438,7 +444,7 @@ module ISDU (   input logic         Clk,
 					Mem_OE = 1'b1;
 					Mem_WE = 1'b1;
 				end
-			LED_PAUSE2;
+			LED_PAUSE2:
 				begin
 					Mem_OE = 1'b1;
 					Mem_WE = 1'b1;

@@ -88,7 +88,6 @@ sixteen_register PC_reg(.Clk,
 								.Din(PC_MUX_OUT),
 								.Dout(PC));
 
-//assign PC_PLUS_ONE = PC + 16'h0001;
 
 // MDR:
 sixteen_register MDR_reg(.Clk,
@@ -154,7 +153,7 @@ mux2 #(3) sr1_mux(.Din0(IR[11:9]), // select 0
 						.Dout(SR1_MUX_OUT));
 // DR MUX
 mux2 #(3) dr_mux(.Din0(IR[11:9]), 		// select 0
-					  .Din1(3'b111), 	// select 1
+					  .Din1(3'b111), 			// select 1
 					  .Select(DRMUX),
 					  .Dout(DR_MUX_OUT));
 // SR2 MUX
@@ -202,6 +201,8 @@ NZP nzp(.*,
 BEN ben(.Clk,.LD_BEN,.FROM_IR(IR[11:9]),
 		  .n, .z, .p,
 		  .ben(BEN)); 
+		  
+		  
 // logic from BUS
 always_comb
 begin

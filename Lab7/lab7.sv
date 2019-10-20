@@ -10,6 +10,7 @@
 
 module lab7(  	  input	       CLOCK_50, 
 					  input  [3:0]  KEY,
+					  input  [7:0]  SW,
 					  output [7:0]  LEDG,
 					  output [12:0] DRAM_ADDR,
 					  output [1:0]  DRAM_BA,
@@ -27,7 +28,9 @@ module lab7(  	  input	       CLOCK_50,
 				  // You need to make sure that the port names here are identical to the port names at 
 				  // the interface in lab7_soc.v
 				  lab7_soc m_lab7_soc (.clk_clk(CLOCK_50),
-											 .reset_reset_n(KEY[0]), 
+											 .reset_reset_n(KEY[0]),
+											 .switch_wire_export(SW),
+											 .key_wire_export(KEY[3:2]),
 											 .led_wire_export(LEDG),
 											 .sdram_wire_addr(DRAM_ADDR),    //  sdram_wire.addr
 											 .sdram_wire_ba(DRAM_BA),      	//  .ba

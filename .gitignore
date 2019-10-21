@@ -8,3 +8,4 @@
 **/simulation
 *.txt
 *.rpt
+!Lab8/*

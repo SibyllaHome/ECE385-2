@@ -47,8 +47,8 @@ create_clock -name {main_clk_50} -period 20.000 -waveform { 0.000 10.000 } [get_
 # Create Generated Clock
 #**************************************************************
 
-create_generated_clock -name {nios_system|sdram_pll|sd1|pll7|clk[0]} -source [get_pins {m_lab7_soc|sdram_pll|sd1|pll7|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -phase -54.000 -master_clock {main_clk_50} [get_pins {m_lab7_soc|sdram_pll|sd1|pll7|clk[0]}] 
-create_generated_clock -name {nios_system|sdram_pll|sd1|pll7|clk[1]} -source [get_pins {m_lab7_soc|sdram_pll|sd1|pll7|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -phase -54.000 -master_clock {main_clk_50} [get_pins {m_lab7_soc|sdram_pll|sd1|pll7|clk[1]}] 
+create_generated_clock -name {nios_system|sdram_pll|sd1|pll7|clk[0]} -source [get_pins {nios_system|sdram_pll|sd1|pll7|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -phase -54.000 -master_clock {main_clk_50} [get_pins {nios_system|sdram_pll|sd1|pll7|clk[0]}] 
+create_generated_clock -name {nios_system|sdram_pll|sd1|pll7|clk[1]} -source [get_pins {nios_system|sdram_pll|sd1|pll7|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -phase -54.000 -master_clock {main_clk_50} [get_pins {nios_system|sdram_pll|sd1|pll7|clk[1]}] 
 
 
 #**************************************************************

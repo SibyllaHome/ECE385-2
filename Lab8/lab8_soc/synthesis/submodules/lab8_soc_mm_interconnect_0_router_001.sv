@@ -137,7 +137,7 @@ module lab8_soc_mm_interconnect_0_router_001
     localparam PAD0 = log2ceil(64'h10 - 64'h0); 
     localparam PAD1 = log2ceil(64'hb0 - 64'ha0); 
     localparam PAD2 = log2ceil(64'hc0 - 64'hb0); 
-    localparam PAD3 = log2ceil(64'hd8 - 64'hd0); 
+    localparam PAD3 = log2ceil(64'hd0 - 64'hc8); 
     localparam PAD4 = log2ceil(64'h1800 - 64'h1000); 
     localparam PAD5 = log2ceil(64'hc000000 - 64'h8000000); 
     // -------------------------------------------------------
@@ -216,8 +216,8 @@ module lab8_soc_mm_interconnect_0_router_001
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 11;
     end
 
-    // ( 0xd0 .. 0xd8 )
-    if ( {address[RG:PAD3],{PAD3{1'b0}}} == 28'hd0  && read_transaction  ) begin
+    // ( 0xc8 .. 0xd0 )
+    if ( {address[RG:PAD3],{PAD3{1'b0}}} == 28'hc8  && read_transaction  ) begin
             src_channel = 14'b000001;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 13;
     end

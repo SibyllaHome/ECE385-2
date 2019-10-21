@@ -57,7 +57,8 @@ module lab8( input               CLOCK_50,
     logic [1:0] hpi_addr;
     logic [15:0] hpi_data_in, hpi_data_out;
     logic hpi_r, hpi_w, hpi_cs, hpi_reset;
-    
+    logic [9:0] POS_X, POS_Y;
+	 logic is_ball;
     // Interface between NIOS II and EZ-OTG chip
     hpi_io_intf hpi_io_inst(
                             .Clk(Clk),
@@ -108,12 +109,21 @@ module lab8( input               CLOCK_50,
     vga_clk vga_clk_instance(.inclk0(Clk), .c0(VGA_CLK));
     
     // TODO: Fill in the connections for the rest of the modules 
-    VGA_controller vga_controller_instance();
+    VGA_controller vga_controller_instance(.*,
+														 .Reset(Reset_h),
+														 .DrawX(POS_X),
+														 .DrawY(POS_Y));
     
     // Which signal should be frame_clk?
-    ball ball_instance();
+    ball ball_instance(.*,
+							  .Reset(Reset_h),
+							  .frame_clk(VGA_VS),
+							  .DrawX(POS_X),
+							  .DrawY(POS_Y));
     
-    color_mapper color_instance();
+    color_mapper color_instance(.*,
+										  .DrawX(POS_X),
+										  .DrawY(POS_Y));
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (keycode[3:0], HEX0);

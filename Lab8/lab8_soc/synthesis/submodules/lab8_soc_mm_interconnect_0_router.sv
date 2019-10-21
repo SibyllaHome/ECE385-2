@@ -267,15 +267,15 @@ module lab8_soc_mm_interconnect_0_router
     end
 
     // ( 0xc8 .. 0xd0 )
-    if ( {address[RG:PAD10],{PAD10{1'b0}}} == 28'hc8   ) begin
-            src_channel = 14'b00000000000001;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
+    if ( {address[RG:PAD10],{PAD10{1'b0}}} == 28'hc8  && read_transaction  ) begin
+            src_channel = 14'b00000000000010;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 13;
     end
 
     // ( 0xd0 .. 0xd8 )
-    if ( {address[RG:PAD11],{PAD11{1'b0}}} == 28'hd0  && read_transaction  ) begin
-            src_channel = 14'b00000000000010;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 13;
+    if ( {address[RG:PAD11],{PAD11{1'b0}}} == 28'hd0   ) begin
+            src_channel = 14'b00000000000001;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
     end
 
     // ( 0x1000 .. 0x1800 )

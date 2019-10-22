@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'lab8_soc'
  * SOPC Builder design path: ../../lab8_soc.sopcinfo
  *
- * Generated: Mon Oct 21 14:22:47 CDT 2019
+ * Generated: Mon Oct 21 20:20:18 CDT 2019
  */
 
 /*
@@ -158,19 +158,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0xc8
+#define ALT_STDERR_BASE 0xd0
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0xc8
+#define ALT_STDIN_BASE 0xd0
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0xc8
+#define ALT_STDOUT_BASE 0xd0
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -195,8 +195,8 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0xc8
-#define JTAG_UART_0_IRQ 0
+#define JTAG_UART_0_BASE 0xd0
+#define JTAG_UART_0_IRQ 5
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
 #define JTAG_UART_0_READ_DEPTH 64
@@ -323,7 +323,7 @@
  */
 
 #define ALT_MODULE_CLASS_otg_hpi_cs altera_avalon_pio
-#define OTG_HPI_CS_BASE 0x40
+#define OTG_HPI_CS_BASE 0x50
 #define OTG_HPI_CS_BIT_CLEARING_EDGE_REGISTER 0
 #define OTG_HPI_CS_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define OTG_HPI_CS_CAPTURE 0
@@ -350,7 +350,7 @@
  */
 
 #define ALT_MODULE_CLASS_otg_hpi_data altera_avalon_pio
-#define OTG_HPI_DATA_BASE 0x70
+#define OTG_HPI_DATA_BASE 0x30
 #define OTG_HPI_DATA_BIT_CLEARING_EDGE_REGISTER 0
 #define OTG_HPI_DATA_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define OTG_HPI_DATA_CAPTURE 0
@@ -377,7 +377,7 @@
  */
 
 #define ALT_MODULE_CLASS_otg_hpi_r altera_avalon_pio
-#define OTG_HPI_R_BASE 0x60
+#define OTG_HPI_R_BASE 0x70
 #define OTG_HPI_R_BIT_CLEARING_EDGE_REGISTER 0
 #define OTG_HPI_R_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define OTG_HPI_R_CAPTURE 0
@@ -404,7 +404,7 @@
  */
 
 #define ALT_MODULE_CLASS_otg_hpi_reset altera_avalon_pio
-#define OTG_HPI_RESET_BASE 0x30
+#define OTG_HPI_RESET_BASE 0x40
 #define OTG_HPI_RESET_BIT_CLEARING_EDGE_REGISTER 0
 #define OTG_HPI_RESET_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define OTG_HPI_RESET_CAPTURE 0
@@ -431,7 +431,7 @@
  */
 
 #define ALT_MODULE_CLASS_otg_hpi_w altera_avalon_pio
-#define OTG_HPI_W_BASE 0x50
+#define OTG_HPI_W_BASE 0x60
 #define OTG_HPI_W_BIT_CLEARING_EDGE_REGISTER 0
 #define OTG_HPI_W_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define OTG_HPI_W_CAPTURE 0
@@ -511,13 +511,13 @@
  */
 
 #define ALT_MODULE_CLASS_sysid_qsys_0 altera_avalon_sysid_qsys
-#define SYSID_QSYS_0_BASE 0xd0
+#define SYSID_QSYS_0_BASE 0xc8
 #define SYSID_QSYS_0_ID 0
 #define SYSID_QSYS_0_IRQ -1
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1571684879
+#define SYSID_QSYS_0_TIMESTAMP 1571707028
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 #endif /* __SYSTEM_H_ */

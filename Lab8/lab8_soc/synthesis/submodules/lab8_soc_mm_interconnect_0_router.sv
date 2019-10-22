@@ -215,31 +215,31 @@ module lab8_soc_mm_interconnect_0_router
     // ( 0x30 .. 0x40 )
     if ( {address[RG:PAD1],{PAD1{1'b0}}} == 28'h30   ) begin
             src_channel = 14'b10000000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 9;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 7;
     end
 
     // ( 0x40 .. 0x50 )
     if ( {address[RG:PAD2],{PAD2{1'b0}}} == 28'h40   ) begin
             src_channel = 14'b01000000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 6;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 9;
     end
 
     // ( 0x50 .. 0x60 )
     if ( {address[RG:PAD3],{PAD3{1'b0}}} == 28'h50   ) begin
             src_channel = 14'b00100000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 10;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 6;
     end
 
     // ( 0x60 .. 0x70 )
     if ( {address[RG:PAD4],{PAD4{1'b0}}} == 28'h60   ) begin
             src_channel = 14'b00010000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 8;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 10;
     end
 
     // ( 0x70 .. 0x80 )
     if ( {address[RG:PAD5],{PAD5{1'b0}}} == 28'h70   ) begin
             src_channel = 14'b00001000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 7;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 8;
     end
 
     // ( 0x80 .. 0x90 )

@@ -512,7 +512,7 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : H25       :        :                   :      
 RESERVED_INPUT_WITH_WEAK_PULLUP : H26       :        :                   :         : 6         :                
 GND                          : H27       : gnd    :                   :         :           :                
 VCCIO6                       : H28       : power  :                   : 2.5V    : 6         :                
-GND+                         : J1        :        :                   :         : 1         :                
+auto_stp_external_clock_0    : J1        : input  : 2.5 V             :         : 1         : N              
 GND                          : J2        : gnd    :                   :         :           :                
 OTG_DATA[5]                  : J3        : bidir  : 2.5 V             :         : 1         : Y              
 OTG_DATA[4]                  : J4        : bidir  : 2.5 V             :         : 1         : Y              

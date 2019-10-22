@@ -79,24 +79,47 @@ module  ball ( input         Clk,                // 50 MHz clock
             // e.g. Ball_Y_Pos - Ball_Size <= Ball_Y_Min 
             // If Ball_Y_Pos is 0, then Ball_Y_Pos - Ball_Size will not be -4, but rather a large positive number.
             if( Ball_Y_Pos + Ball_Size >= Ball_Y_Max )  				// Ball is at the bottom edge, BOUNCE!
-                Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1);  // 2's complement.  
+					begin
+					Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1);  // 2's complement.
+					end
             else if ( Ball_Y_Pos <= Ball_Y_Min + Ball_Size ) 		// Ball is at the top edge, BOUNCE!
-                Ball_Y_Motion_in = Ball_Y_Step;
+               begin
+					Ball_Y_Motion_in = Ball_Y_Step;
+					end
             // TODO: Add other boundary detections and handle keypress here.
 				else if ( Ball_X_Pos + Ball_Size >= Ball_X_Max )		// Ball is at the right edge!
-					 Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);  // 2's complement
+					begin
+					Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);  // 2's complement
+					end
 				else if ( Ball_X_Pos <= Ball_X_Min + Ball_Size )		// Ball is at the left edge!
-					 Ball_X_Motion_in = Ball_X_Step;
+					begin
+					Ball_X_Motion_in = Ball_X_Step;
+					end
 					 
 				// handling keycode WASD
-				else if ( keycode == 8'h1A)
-					 Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1); // W: UP
+				else 
+				begin
+				if ( keycode == 8'h1A)
+					begin
+					Ball_X_Motion_in = 0;
+					Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1); // W: UP
+					end
 				else if ( keycode == 8'h16 )
-					 Ball_Y_Motion_in = Ball_Y_Step;					// S: DOWN
+					begin
+					Ball_X_Motion_in = 0;
+					Ball_Y_Motion_in = Ball_Y_Step;					// S: DOWN
+					end
 				else if ( keycode == 8'h04 )
-					 Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);	// A: LEFT
+					begin
+					Ball_Y_Motion_in = 0;
+					Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);	// A: LEFT
+					end
 				else if ( keycode == 8'h07 )
-					 Ball_X_Motion_in = Ball_X_Step;					// D: RIGHT
+					begin
+					Ball_Y_Motion_in = 0;
+					Ball_X_Motion_in = Ball_X_Step;					// D: RIGHT
+					end
+				end
             // Update the ball's position with its motion
             Ball_X_Pos_in = Ball_X_Pos + Ball_X_Motion;
             Ball_Y_Pos_in = Ball_Y_Pos + Ball_Y_Motion;

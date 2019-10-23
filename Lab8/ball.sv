@@ -19,7 +19,8 @@ module  ball ( input         Clk,                // 50 MHz clock
                              frame_clk,          // The clock indicating a new frame (~60Hz)
 					input [7:0]   keycode,				 // represent for key input 8 bits
                input [9:0]   DrawX, DrawY,       // Current pixel coordinates
-               output logic  is_ball             // Whether current pixel belongs to ball or background
+               output logic  is_ball,             // Whether current pixel belongs to ball or background
+					output [3:0]  LEDG
               );
     
     parameter [9:0] Ball_X_Center = 10'd320;  // Center position on the X axis
@@ -51,6 +52,7 @@ module  ball ( input         Clk,                // 50 MHz clock
             Ball_Y_Pos <= Ball_Y_Center;
             Ball_X_Motion <= 10'd0;
             Ball_Y_Motion <= Ball_Y_Step;
+				LEDG[3:0] <= {4'b1111};
         end
         else
         begin
@@ -58,6 +60,14 @@ module  ball ( input         Clk,                // 50 MHz clock
             Ball_Y_Pos <= Ball_Y_Pos_in;
             Ball_X_Motion <= Ball_X_Motion_in;
             Ball_Y_Motion <= Ball_Y_Motion_in;
+				if(Ball_X_Motion[9] == 1'b1)									 	 //left
+					LEDG[3:0] <= {4'b0100};
+				if(Ball_X_Motion[9] == 1'b0 && Ball_X_Motion != 10'b0) 										 //right
+					LEDG[3:0] <= {4'b1000};
+				if(Ball_Y_Motion[9] == 1'b1)										 //up
+					LEDG[3:0] <= {4'b0001};
+				if(Ball_Y_Motion[9] == 1'b0 && Ball_Y_Motion != 10'b0) 										 //down
+					LEDG[3:0] <= {4'b0010};
         end
     end
     //////// Do not modify the always_ff blocks. ////////
@@ -70,7 +80,7 @@ module  ball ( input         Clk,                // 50 MHz clock
         Ball_Y_Pos_in = Ball_Y_Pos;
         Ball_X_Motion_in = Ball_X_Motion;
         Ball_Y_Motion_in = Ball_Y_Motion;
-        
+//		  LEDG[3:0] = {4'b1111};
         // Update position and motion only at rising edge of frame clock
         if (frame_clk_rising_edge)
         begin
@@ -80,46 +90,58 @@ module  ball ( input         Clk,                // 50 MHz clock
             // If Ball_Y_Pos is 0, then Ball_Y_Pos - Ball_Size will not be -4, but rather a large positive number.
             if( Ball_Y_Pos + Ball_Size >= Ball_Y_Max )  				// Ball is at the bottom edge, BOUNCE!
 					begin
+					Ball_X_Motion_in = 10'b0;
 					Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1);  // 2's complement.
+//					LEDG[3:0] = {4'b0001};
 					end
             else if ( Ball_Y_Pos <= Ball_Y_Min + Ball_Size ) 		// Ball is at the top edge, BOUNCE!
                begin
+					Ball_X_Motion_in = 10'b0;
 					Ball_Y_Motion_in = Ball_Y_Step;
+//					LEDG[3:0] = {4'b0010};
 					end
             // TODO: Add other boundary detections and handle keypress here.
 				else if ( Ball_X_Pos + Ball_Size >= Ball_X_Max )		// Ball is at the right edge!
 					begin
+					Ball_Y_Motion_in = 10'b0;
 					Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);  // 2's complement
+//					LEDG[3:0] = {4'b0100};
 					end
 				else if ( Ball_X_Pos <= Ball_X_Min + Ball_Size )		// Ball is at the left edge!
 					begin
+					Ball_Y_Motion_in = 10'b0;
 					Ball_X_Motion_in = Ball_X_Step;
+//					LEDG[3:0] = {4'b1000};
 					end
 					 
 				// handling keycode WASD
 				else 
-				begin
-				if ( keycode == 8'h1A)
 					begin
-					Ball_X_Motion_in = 0;
-					Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1); // W: UP
+					if ( keycode == 8'h1A)
+						begin
+						Ball_X_Motion_in = 0;
+						Ball_Y_Motion_in = (~(Ball_Y_Step) + 1'b1); // W: UP
+//						LEDG[3:0] = {4'b0001};
+						end
+					else if ( keycode == 8'h16 )
+						begin
+						Ball_X_Motion_in = 0;
+						Ball_Y_Motion_in = Ball_Y_Step;					// S: DOWN
+//						LEDG[3:0] = {4'b0010};
+						end
+					else if ( keycode == 8'h04 )
+						begin
+						Ball_Y_Motion_in = 0;
+						Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);	// A: LEFT
+//						LEDG[3:0] = {4'b0100};
+						end
+					else if ( keycode == 8'h07 )
+						begin
+						Ball_Y_Motion_in = 0;
+						Ball_X_Motion_in = Ball_X_Step;					// D: RIGHT
+//						LEDG[3:0] = {4'b1000};
+						end
 					end
-				else if ( keycode == 8'h16 )
-					begin
-					Ball_X_Motion_in = 0;
-					Ball_Y_Motion_in = Ball_Y_Step;					// S: DOWN
-					end
-				else if ( keycode == 8'h04 )
-					begin
-					Ball_Y_Motion_in = 0;
-					Ball_X_Motion_in = (~(Ball_X_Step) + 1'b1);	// A: LEFT
-					end
-				else if ( keycode == 8'h07 )
-					begin
-					Ball_Y_Motion_in = 0;
-					Ball_X_Motion_in = Ball_X_Step;					// D: RIGHT
-					end
-				end
             // Update the ball's position with its motion
             Ball_X_Pos_in = Ball_X_Pos + Ball_X_Motion;
             Ball_Y_Pos_in = Ball_Y_Pos + Ball_Y_Motion;

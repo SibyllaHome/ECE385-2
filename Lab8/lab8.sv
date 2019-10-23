@@ -25,6 +25,7 @@ module lab8( input               CLOCK_50,
                                  VGA_BLANK_N,  //VGA Blank signal
                                  VGA_VS,       //VGA virtical sync signal
                                  VGA_HS,       //VGA horizontal sync signal
+				 output logic [3:0]	LEDG,			  //LEDs indicating the direction of the ball
              // CY7C67200 Interface
              inout  wire  [15:0] OTG_DATA,     //CY7C67200 Data bus 16 Bits
              output logic [1:0]  OTG_ADDR,     //CY7C67200 Address 2 Bits

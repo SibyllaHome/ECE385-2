@@ -58,6 +58,132 @@ char charsToHex(char c1, char c2)
 	return (hex1 << 4) + hex2;
 }
 
+void KeyExpansion(unsigned char* key, unsigned long* w, unsigned Nk){
+	unsigned long* temp;
+	unsigned i = 0;
+	while(i < Nk){
+		w[i] = (key[4*i] << 24) | (key[4*i + 1] << 16) | (key[4*i + 2] << 8) | key[4*i + 3];
+		i++;
+	}
+	i = Nk;
+	while(i < 4 * (10 + 1)){
+		temp = w[i - 1];
+		if(i % Nk == 0){
+			temp = SubWord(RotWord(temp)) ^ Rcon[i/Nk];
+		}
+		w[i] = w[i - Nk] ^ temp;
+		i++;
+	}
+}
+
+unsigned long SubWord(unsigned long word){
+	unsigned char* temp = (unsigned char*) &word;
+	*temp 		= aes_sbox[(int) *temp];
+	*(temp + 1) = aes_sbox[(int) *(temp + 1)];
+	*(temp + 2) = aes_sbox[(int) *(temp + 2)];
+	*(temp + 3) = aes_sbox[(int) *(temp + 3)];
+	return word;
+}
+
+unsigned long RotWord(unsigned long * word){
+	return ((*word << 8) | (*word << 24));
+}
+
+void SubBytes(unsigned char* state){
+	int i = 0;
+	while(i < 16){
+		*(state + i) = aes_sbox[(int) *(state + i)];
+		i++;
+	}
+}
+
+void AddRoundKey(unsigned char* state, unsigned long* roundkey){
+	state[0] = state[0] ^ (roundkey[0] >> 24); // 0xFF
+	state[1] = state[1] ^ (roundkey[1] >> 24); // 0xFF
+	state[2] = state[2] ^ (roundkey[2] >> 24); // 0xFF
+	state[3] = state[3] ^ (roundkey[3] >> 24); // 0xFF
+
+	state[4] = state[4] ^ (roundkey[0] >> 16); // 0xFF
+	state[5] = state[5] ^ (roundkey[1] >> 16); // 0xFF
+	state[6] = state[6] ^ (roundkey[2] >> 16); // 0xFF
+	state[7] = state[7] ^ (roundkey[3] >> 16); // 0xFF
+
+	state[8] = state[8] ^ (roundkey[0] >> 8); // 0xFF
+	state[9] = state[9] ^ (roundkey[1] >> 8); // 0xFF
+	state[10] = state[10] ^ (roundkey[2] >> 8); // 0xFF
+	state[11] = state[11] ^ (roundkey[3] >> 8); // 0xFF
+
+	state[12] = state[12] ^ (roundkey[0]); // 0xFF
+	state[13] = state[13] ^ (roundkey[1]); // 0xFF
+	state[14] = state[14] ^ (roundkey[2]); // 0xFF
+	state[15] = state[15] ^ (roundkey[3]); // 0xFF
+}
+
+void ShiftRows(unsigned char* state){
+	//first row not change 
+
+	//second row
+	unsigned char temp = state[4];
+	state[4] = state[5];
+	state[5] = state[6];
+	state[6] = state[7];
+	state[7] = temp;
+
+	//third row
+	unsigned char temp1 = state[8];
+	unsigned char temp2 = state[9];
+	state[8] = state[10];
+	state[9] = state[11];
+	state[10] = temp1;
+	state[11] = temp2;
+
+	//fourth row
+	unsigned temp3 = state[15];
+	state[15] = state[14];
+	state[14] = state[13];
+	state[13] = state[12];
+	state[12] = temp3;
+
+}
+
+void mixColumns(unsigned char* a){
+	unsigned char b[16];
+	b[0]  = gf_mul[a[0]][0] ^ gf_mul[a[4]][1] ^ a[8] ^ a[12];
+	b[4]  = a[0] ^ gf_mul[a[4]][0] ^ gf_mul[a[8]][1] ^ a[12];
+	b[8]  = a[0] ^ a[4] ^ gf_mul[a[8]][0] ^ gf_mul[a[12]][1];
+	b[12] = gf_mul[a[0]][1] ^ a[4] ^ a[8] ^ gf_mul[a[12]][0];
+
+	b[1]  = gf_mul[a[1]][0] ^ gf_mul[a[5]][1] ^ a[9] ^ a[13];
+	b[5]  = a[1] ^ gf_mul[a[5]][0] ^ gf_mul[a[9]][1] ^ a[13];
+	b[9]  = a[1] ^ a[5] ^ gf_mul[a[9]][0] ^ gf_mul[a[13]][1];
+	b[13] = gf_mul[a[1]][1] ^ a[5] ^ a[9] ^ gf_mul[a[13]][0];
+
+	b[2]  = gf_mul[a[2]][0] ^ gf_mul[a[6]][1] ^ a[10] ^ a[14];
+	b[6]  = a[2] ^ gf_mul[a[6]][0] ^ gf_mul[a[10]][1] ^ a[14];
+	b[10] = a[2] ^ a[6] ^ gf_mul[a[10]][0] ^ gf_mul[a[14]][1];
+	b[14] = gf_mul[a[2]][1] ^ a[6] ^ a[10] ^ gf_mul[a[14]][0];
+
+	b[3]  = gf_mul[a[3]][0] ^ gf_mul[a[7]][1] ^ a[11] ^ a[15];
+	b[7]  = a[3] ^ gf_mul[a[7]][0] ^ gf_mul[a[11]][1] ^ a[15];
+	b[11] = a[3] ^ a[7] ^ gf_mul[a[11]][0] ^ gf_mul[a[15]][1];
+	b[15] = gf_mul[a[3]][1] ^ a[7] ^ a[11] ^ gf_mul[a[15]][0];
+
+	int i = 0;
+	while(i < 16){
+		//copy
+		a[i] = b[i];
+		i++;
+	}
+}
+
+
+// //alternative version of RotWord
+// unsigned long RotWord(unsigned long word){
+// 	return (word << 8 | word << 24);
+// }
+
+
+
 /** encrypt
  *  Perform AES encryption in software.
  *
@@ -66,10 +192,53 @@ char charsToHex(char c1, char c2)
  *  Output:  msg_enc - Pointer to 4x 32-bit int array that contains the encrypted message
  *               key - Pointer to 4x 32-bit int array that contains the input key
  */
-void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int * msg_enc, unsigned int * key)
+void encrypt(unsigned char * plaintext_asc, unsigned char * key_asc, unsigned long * state, unsigned long * key)
 {
-	// Implement this function
+ unsigned long roundkey[44]; // 11 round keys in 4x 32bit format
+ unsigned char tempKey[16]; // store key as an array of unsigned characters
+ unsigned char tempState[16]; // store state as an array of unsigned characters
+
+ /*Initialize state/key arrays to the initial plaintext and key*/
+ int row, col, i;
+for (row = 0; row < 4; row++) {
+ for (col = 0; col < 4; col++) {
+  i = col+row*4;
+  tempKey[col+row*4] = charsToHex(key_asc[2*i], key_asc[2*i+1]);
+  tempState[row+col*4] = charsToHex(plaintext_asc[2*i], plaintext_asc[2*i+1]);
+ }
 }
+
+for(i = 0; i < 4; i++)
+  key[i] = ((tempKey[4*i] << 24) | (tempKey[4*i+1] << 16) | (tempKey[4*i+2] << 8) | tempKey[4*i+3]);
+
+ AES_PTR[0] = key[0];
+ AES_PTR[1] = key[1];
+ AES_PTR[2] = key[2];
+ AES_PTR[3] = key[3];
+
+ keyExpansion(tempKey, roundkey);
+ addRoundKey(tempState, roundkey);
+
+// 9 rounds
+for (int round = 1; round < 10; round++) {
+ subBytes(tempState);
+ shiftRows(tempState);
+ mixColumns(tempState);
+ addRoundKey(tempState, roundkey + 4*round);
+}
+
+ // last round
+subBytes(tempState);
+shiftRows(tempState);
+addRoundKey(tempState, roundkey + 40);
+
+for(i = 0; i < 4; i++)
+ state[i] = ((tempState[4*i] << 24) | (tempState[4*i+1] << 16) | (tempState[4*i+2] << 8) | tempState[4*i+3]);
+}
+
+
+
+
 
 /** decrypt
  *  Perform AES decryption in hardware.

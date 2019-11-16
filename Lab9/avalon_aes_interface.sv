@@ -37,6 +37,41 @@ module avalon_aes_interface (
 	// Exported Conduit
 	output logic [31:0] EXPORT_DATA		// Exported Conduit Signal to LEDs
 );
+	
+	//	assign EXPORT_DATA[31:0] = 32'h12345678;
+	//	assign EXPORT_DATA[15:0]  = 16'h5678;
+	
+	logic[31:0] reg_file[15:0];
+	
+	//
+	always_ff @ (posedge CLK)
+	begin
+		for(int i = 0; i < 16; i++)
+		begin
+			if(RESET) reg_file[i] <= 32'b0;	
+		end
+	end
+	
+	
+	always_comb
+	begin
+		if(AVL_CS)
+		begin
+			for(int i = 0; i < 16; i++)
+			begin
+				if(AVL_WRITE && AVL_ADDR == i)
+				begin
+					if(AVL_BYTE_EN[3]) reg_file[i] [31:24] = AVL_WRITEDATA[31:24];
+					if(AVL_BYTE_EN[2]) reg_file[i] [23:16] = AVL_WRITEDATA[23:16];
+					if(AVL_BYTE_EN[1]) reg_file[i] [15:8]  = AVL_WRITEDATA[15:8];
+					if(AVL_BYTE_EN[0]) reg_file[i] [7:0]   = AVL_WRITEDATA[7:0];
+				end
+			end
+		end
+	end
+	
+
+
 
 
 endmodule

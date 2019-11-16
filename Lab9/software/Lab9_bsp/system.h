@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'lab9_soc'
  * SOPC Builder design path: ../../lab9_soc.sopcinfo
  *
- * Generated: Mon Oct 28 21:08:30 CDT 2019
+ * Generated: Tue Oct 29 14:57:32 CDT 2019
  */
 
 /*
@@ -151,8 +151,8 @@
 #define __ALTERA_AVALON_JTAG_UART
 #define __ALTERA_AVALON_NEW_SDRAM_CONTROLLER
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
-#define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_SYSID_QSYS
+#define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
 #define __ALTPLL
 
@@ -194,13 +194,39 @@
 
 
 /*
+ * TIMER configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_TIMER altera_avalon_timer
+#define TIMER_ALWAYS_RUN 0
+#define TIMER_BASE 0x20
+#define TIMER_COUNTER_SIZE 32
+#define TIMER_FIXED_PERIOD 0
+#define TIMER_FREQ 50000000
+#define TIMER_IRQ 1
+#define TIMER_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define TIMER_LOAD_VALUE 49999
+#define TIMER_MULT 0.001
+#define TIMER_NAME "/dev/TIMER"
+#define TIMER_PERIOD 1
+#define TIMER_PERIOD_UNITS "ms"
+#define TIMER_RESET_OUTPUT 0
+#define TIMER_SNAPSHOT 1
+#define TIMER_SPAN 32
+#define TIMER_TICKS_PER_SEC 1000
+#define TIMER_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_TYPE "altera_avalon_timer"
+
+
+/*
  * hal configuration
  *
  */
 
 #define ALT_INCLUDE_INSTRUCTION_RELATED_EXCEPTION_API
 #define ALT_MAX_FD 32
-#define ALT_SYS_CLK none
+#define ALT_SYS_CLK TIMER
 #define ALT_TIMESTAMP_CLK none
 
 
@@ -220,33 +246,6 @@
 #define JTAG_UART_0_TYPE "altera_avalon_jtag_uart"
 #define JTAG_UART_0_WRITE_DEPTH 64
 #define JTAG_UART_0_WRITE_THRESHOLD 8
-
-
-/*
- * key configuration
- *
- */
-
-#define ALT_MODULE_CLASS_key altera_avalon_pio
-#define KEY_BASE 0x30
-#define KEY_BIT_CLEARING_EDGE_REGISTER 0
-#define KEY_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define KEY_CAPTURE 0
-#define KEY_DATA_WIDTH 4
-#define KEY_DO_TEST_BENCH_WIRING 0
-#define KEY_DRIVEN_SIM_VALUE 0
-#define KEY_EDGE_TYPE "NONE"
-#define KEY_FREQ 50000000
-#define KEY_HAS_IN 1
-#define KEY_HAS_OUT 0
-#define KEY_HAS_TRI 0
-#define KEY_IRQ -1
-#define KEY_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define KEY_IRQ_TYPE "NONE"
-#define KEY_NAME "/dev/key"
-#define KEY_RESET_VALUE 0
-#define KEY_SPAN 16
-#define KEY_TYPE "altera_avalon_pio"
 
 
 /*
@@ -343,7 +342,7 @@
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1572312221
+#define SYSID_QSYS_0_TIMESTAMP 1572378797
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 #endif /* __SYSTEM_H_ */

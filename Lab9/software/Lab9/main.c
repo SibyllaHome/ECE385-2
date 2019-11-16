@@ -14,7 +14,7 @@ University of Illinois ECE Department
 #include "aes.h"
 
 // Pointer to base address of AES module, make sure it matches Qsys
-volatile unsigned int * AES_PTR = (unsigned int *) 0x00000100;
+volatile unsigned int * AES_PTR = (unsigned int *) 0x00000040;
 
 // Execution mode: 0 for testing, 1 for benchmarking
 int run_mode = 0;
@@ -58,6 +58,7 @@ char charsToHex(char c1, char c2)
 	return (hex1 << 4) + hex2;
 }
 
+
 unsigned long SubWord(unsigned long word){
 	unsigned char* temp = (unsigned char*) &word;
 	*temp 		= aes_sbox[(int) *temp];
@@ -68,7 +69,7 @@ unsigned long SubWord(unsigned long word){
 }
 
 unsigned long RotWord(unsigned long * word){
-	return ((*word << 8) | (*word << 24));
+	return ((*word << 8) | (*word >> 24));
 }
 
 void SubBytes(unsigned char* state){
@@ -78,6 +79,8 @@ void SubBytes(unsigned char* state){
 		i++;
 	}
 }
+
+
 
 
 void KeyExpansion(unsigned char* key, unsigned long* w, unsigned Nk){
@@ -101,20 +104,20 @@ void KeyExpansion(unsigned char* key, unsigned long* w, unsigned Nk){
 
 
 void AddRoundKey(unsigned char* state, unsigned long* roundkey){
-	state[0] = state[0] ^ (roundkey[0] >> 24); // 0xFF
-	state[1] = state[1] ^ (roundkey[1] >> 24); // 0xFF
-	state[2] = state[2] ^ (roundkey[2] >> 24); // 0xFF
-	state[3] = state[3] ^ (roundkey[3] >> 24); // 0xFF
+	state[0] = state[0] ^ ((roundkey[0] >> 24)); // 0xFF
+	state[1] = state[1] ^ ((roundkey[1] >> 24)); // 0xFF
+	state[2] = state[2] ^ ((roundkey[2] >> 24)); // 0xFF
+	state[3] = state[3] ^ ((roundkey[3] >> 24)); // 0xFF
 
-	state[4] = state[4] ^ (roundkey[0] >> 16); // 0xFF
-	state[5] = state[5] ^ (roundkey[1] >> 16); // 0xFF
-	state[6] = state[6] ^ (roundkey[2] >> 16); // 0xFF
-	state[7] = state[7] ^ (roundkey[3] >> 16); // 0xFF
+	state[4] = state[4] ^ ((roundkey[0] >> 16)); // 0xFF
+	state[5] = state[5] ^ ((roundkey[1] >> 16)); // 0xFF
+	state[6] = state[6] ^ ((roundkey[2] >> 16)); // 0xFF
+	state[7] = state[7] ^ ((roundkey[3] >> 16)); // 0xFF
 
-	state[8] = state[8] ^ (roundkey[0] >> 8); // 0xFF
-	state[9] = state[9] ^ (roundkey[1] >> 8); // 0xFF
-	state[10] = state[10] ^ (roundkey[2] >> 8); // 0xFF
-	state[11] = state[11] ^ (roundkey[3] >> 8); // 0xFF
+	state[8] = state[8] ^ ((roundkey[0] >> 8)); // 0xFF
+	state[9] = state[9] ^ ((roundkey[1] >> 8)); // 0xFF
+	state[10] = state[10] ^ ((roundkey[2] >> 8)); // 0xFF
+	state[11] = state[11] ^ ((roundkey[3] >> 8)); // 0xFF
 
 	state[12] = state[12] ^ (roundkey[0]); // 0xFF
 	state[13] = state[13] ^ (roundkey[1]); // 0xFF
@@ -195,7 +198,7 @@ void mixColumns(unsigned char* a){
  *  Output:  msg_enc - Pointer to 4x 32-bit int array that contains the encrypted message
  *               key - Pointer to 4x 32-bit int array that contains the input key
  */
-void encrypt(unsigned char * plaintext_asc, unsigned char * key_asc, unsigned long * state, unsigned long * key)
+void encrypt(unsigned char * plaintext_asc, unsigned char * key_asc, unsigned long * msg_enc, unsigned long * key)
 {
  unsigned long roundkey[44]; // 11 round keys in 4x 32bit format
  unsigned char tempKey[16]; // store key as an array of unsigned characters
@@ -211,16 +214,21 @@ for (row = 0; row < 4; row++) {
  }
 }
 
-for(i = 0; i < 4; i++)
+for(i = 0; i < 4; i++){
   key[i] = ((tempKey[4*i] << 24) | (tempKey[4*i+1] << 16) | (tempKey[4*i+2] << 8) | tempKey[4*i+3]);
+}
 
- AES_PTR[0] = key[0];
- AES_PTR[1] = key[1];
- AES_PTR[2] = key[2];
- AES_PTR[3] = key[3];
 
  KeyExpansion(tempKey, roundkey, 4);
+
+// printf("Initial Round K")
+// printf("%08x %08x\n%08x %08x\n",roundkey[0], roundkey[1], roundkey[2], roundkey[3]);
+
  AddRoundKey(tempState, roundkey);
+
+// printf("After Initial Add Round Key:\n");
+// printf("%08x %08x\n%08x %08x\n",roundkey[0], roundkey[1], roundkey[2], roundkey[3]);
+// printf("State_temp:\n%08x %08x\n %08x %08x\n",tempState[0], tempState[1], tempState[2], tempState[3]);
 
 // 9 rounds
 for (int round = 1; round < 10; round++) {
@@ -235,8 +243,22 @@ SubBytes(tempState);
 ShiftRows(tempState);
 AddRoundKey(tempState, roundkey + 40);
 
+//debug
+//printf("%08x %08x\n%08x %08x\n",roundkey[40], roundkey[41], roundkey[42], roundkey[43]);
+
+for(i = 0; i < 4; i++){
+	key[i] = roundkey[i];
+}
+
+AES_PTR[0] = key[0];
+AES_PTR[1] = key[1];
+AES_PTR[2] = key[2];
+AES_PTR[3] = key[3];
+
+//printf("KEY!!:\n%08x %08x\n%08x %08x\n", key[0],key[1],key[2],key[3]);
+
 for(i = 0; i < 4; i++)
- state[i] = ((tempState[4*i] << 24) | (tempState[4*i+1] << 16) | (tempState[4*i+2] << 8) | tempState[4*i+3]);
+ msg_enc[i] = ((tempState[i] << 24) | (tempState[4+i] << 16) | (tempState[8+i] << 8) | tempState[12+i]);
 }
 
 
@@ -250,9 +272,35 @@ for(i = 0; i < 4; i++)
  *              key - Pointer to 4x 32-bit int array that contains the input key
  *  Output: msg_dec - Pointer to 4x 32-bit int array that contains the decrypted message
  */
-void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
-{
+void decrypt(unsigned long * msg_enc, unsigned long * msg_dec, unsigned long * key)
+{							//state
 	// Implement this function
+
+
+	AES_PTR[0] = key[0];
+	AES_PTR[1] = key[1];
+	AES_PTR[2] = key[2];
+	AES_PTR[3] = key[3];
+	printf("key [0,1,2,3]:\n%08x\n%08x\n%08x\n%08x\n",key[0],key[1],key[2],key[3]);
+
+	AES_PTR[4] = msg_enc[0];
+	AES_PTR[5] = msg_enc[1];
+	AES_PTR[6] = msg_enc[2];
+	AES_PTR[7] = msg_enc[3];
+	printf("enc [0,1,2,3]:\n%08x\n%08x\n%08x\n%08x\n",msg_enc[0],msg_enc[1],msg_enc[2],msg_enc[3]);
+
+	AES_PTR[14] = 1;
+
+	while(AES_PTR[15] == 0) {}
+
+	msg_dec[3] = AES_PTR[8];
+	msg_dec[2] = AES_PTR[9];
+	msg_dec[1] = AES_PTR[10];
+	msg_dec[0] = AES_PTR[11];
+
+
+	AES_PTR[14] = 0;
+
 }
 
 /** main
@@ -265,9 +313,9 @@ int main()
 	unsigned char msg_ascii[33];
 	unsigned char key_ascii[33];
 	// Key, Encrypted Message, and Decrypted Message in 4x 32-bit Format to facilitate Read/Write to Hardware
-	unsigned int key[4];
-	unsigned int msg_enc[4];
-	unsigned int msg_dec[4];
+	unsigned long key[4];
+	unsigned long msg_enc[4];
+	unsigned long msg_dec[4];
 
 	printf("Select execution mode: 0 for testing, 1 for benchmarking: ");
 	scanf("%d", &run_mode);
@@ -283,15 +331,18 @@ int main()
 			scanf("%s", key_ascii);
 			printf("\n");
 			encrypt(msg_ascii, key_ascii, msg_enc, key);
+			//debug
+//			printf("KEY!! in main!:\n%08x %08x\n%08x %08x\n", key[0],key[1],key[2],key[3]);
+			//debug
 			printf("\nEncrpted message is: \n");
 			for(i = 0; i < 4; i++){
-				printf("%08x", msg_enc[i]);
+				printf("%08x\n", msg_enc[i]);
 			}
 			printf("\n");
 			decrypt(msg_enc, msg_dec, key);
 			printf("\nDecrypted message is: \n");
 			for(i = 0; i < 4; i++){
-				printf("%08x", msg_dec[i]);
+				printf("%08x\n", msg_dec[i]);
 			}
 			printf("\n");
 		}
@@ -324,3 +375,356 @@ int main()
 	}
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+///************************************************************************
+//Lab 9 Nios Software
+//
+//Dong Kai Wang, Fall 2017
+//Christine Chen, Fall 2013
+//
+//For use with ECE 385 Experiment 9
+//University of Illinois ECE Department
+//************************************************************************/
+//
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <time.h>
+//#include "aes.h"
+//
+//// Pointer to base address of AES module, make sure it matches Qsys
+//volatile unsigned int * AES_PTR = (unsigned int *) 0x00000040;
+//
+//// Execution mode: 0 for testing, 1 for benchmarking
+//int run_mode = 0;
+//
+///** charToHex
+// *  Convert a single character to the 4-bit value it represents.
+// *
+// *  input: a character c (e.g. 'A')
+// *  output: converted 4-bit value (e.g. 0xA)
+// */
+//char charToHex(char c)
+//{
+//	char hex = c;
+//
+//	if (hex >= '0' && hex <= '9')
+//		hex -= '0';
+//	else if (hex >= 'A' && hex <= 'F')
+//	{
+//		hex -= 'A';
+//		hex += 10;
+//	}
+//	else if (hex >= 'a' && hex <= 'f')
+//	{
+//		hex -= 'a';
+//		hex += 10;
+//	}
+//	return hex;
+//}
+//
+///** charsToHex
+// *  Convert two characters to byte value it represents.
+// *  Inputs must be 0-9, A-F, or a-f.
+// *
+// *  input: two characters c1 and c2 (e.g. 'A' and '7')
+// *  output: converted byte value (e.g. 0xA7)
+// */
+//char charsToHex(char c1, char c2)
+//{
+//	char hex1 = charToHex(c1);
+//	char hex2 = charToHex(c2);
+//	return (hex1 << 4) + hex2;
+//}
+//
+//
+//// Accepts an unsigned character array in column major order
+//// Modifies the passed array instead of returning anything
+//void mixColumns(unsigned char* array)
+//{
+//	unsigned char tempArray[16];
+//
+//	tempArray[0]  = gf_mul[array[0]][0] ^ gf_mul[array[4]][1] ^ array[8] ^ array[12];
+//	tempArray[4]  = array[0] ^ gf_mul[array[4]][0] ^ gf_mul[array[8]][1] ^ array[12];
+//	tempArray[8]  = array[0] ^ array[4] ^ gf_mul[array[8]][0] ^ gf_mul[array[12]][1];
+//	tempArray[12] = gf_mul[array[0]][1] ^ array[4] ^ array[8] ^ gf_mul[array[12]][0];
+//
+//	tempArray[1]  = gf_mul[array[1]][0] ^ gf_mul[array[5]][1] ^ array[9] ^ array[13];
+//	tempArray[5]  = array[1] ^ gf_mul[array[5]][0] ^ gf_mul[array[9]][1] ^ array[13];
+//	tempArray[9]  = array[1] ^ array[5] ^ gf_mul[array[9]][0] ^ gf_mul[array[13]][1];
+//	tempArray[13] = gf_mul[array[1]][1] ^ array[5] ^ array[9] ^ gf_mul[array[13]][0];
+//
+//	tempArray[2]  = gf_mul[array[2]][0] ^ gf_mul[array[6]][1] ^ array[10] ^ array[14];
+//	tempArray[6]  = array[2] ^ gf_mul[array[6]][0] ^ gf_mul[array[10]][1] ^ array[14];
+//	tempArray[10] = array[2] ^ array[6] ^ gf_mul[array[10]][0] ^ gf_mul[array[14]][1];
+//	tempArray[14] = gf_mul[array[2]][1] ^ array[6] ^ array[10] ^ gf_mul[array[14]][0];
+//
+//	tempArray[3]  = gf_mul[array[3]][0] ^ gf_mul[array[7]][1] ^ array[11] ^ array[15];
+//	tempArray[7]  = array[3] ^ gf_mul[array[7]][0] ^ gf_mul[array[11]][1] ^ array[15];
+//	tempArray[11] = array[3] ^ array[7] ^ gf_mul[array[11]][0] ^ gf_mul[array[15]][1];
+//	tempArray[15] = gf_mul[array[3]][1] ^ array[7] ^ array[11] ^ gf_mul[array[15]][0];
+//
+//	int i;
+//	for(i = 0; i < 16; i++){
+//		array[i] = tempArray[i];
+//	}
+//}
+//
+//unsigned long rotWord(unsigned long * word) {
+//	return ((*word << 8) | (*word >>24));
+//}
+//
+//void subByte(unsigned char * byte) {
+//	unsigned char temp = aes_sbox[(int) *byte];
+//	*byte = temp;
+//}
+//
+//unsigned long subWord(unsigned long word) {
+//	unsigned char *p = (unsigned char*) &word;
+//	subByte(p);
+//	subByte(p+1);
+//	subByte(p+2);
+//	subByte(p+3);
+//	return word;
+//}
+//
+//void keyExpansion(unsigned char * key, unsigned long * rdkey) {
+//	unsigned long temp;
+//	int i;
+//	for (i = 0; i < 4; i++) {
+//		rdkey[i] = (key[4*i] << 24) | (key[4*i+1] << 16) | (key[4*i+2] << 8) | key[4*i+3];
+//	}
+//
+//	for (i = 4; i < 44; i++) {
+//		temp = rdkey[i-1];
+//		if (i % 4 == 0) {
+//			temp = subWord(rotWord(&temp)) ^ Rcon[i/4];
+//		}
+//		rdkey[i] = rdkey[i-4] ^ temp;
+//	}
+//}
+//
+//void addRoundKey(unsigned char * state, unsigned long * rdkey) {
+//	state[0] = state[0]^((rdkey[0] >> 24) & 0xFF);
+//	state[1] = state[1]^((rdkey[1] >> 24) & 0xFF);
+//	state[2] = state[2]^((rdkey[2] >> 24) & 0xFF);
+//	state[3] = state[3]^((rdkey[3] >> 24) & 0xFF);
+//
+//	state[4] = state[4]^((rdkey[0] >> 16) & 0xFF);
+//	state[5] = state[5]^((rdkey[1] >> 16) & 0xFF);
+//	state[6] = state[6]^((rdkey[2] >> 16) & 0xFF);
+//	state[7] = state[7]^((rdkey[3] >> 16) & 0xFF);
+//
+//	state[8]  = state[8]^((rdkey[0] >> 8) & 0xFF);
+//	state[9]  = state[9]^((rdkey[1] >> 8) & 0xFF);
+//	state[10] = state[10]^((rdkey[2] >> 8) & 0xFF);
+//	state[11] = state[11]^((rdkey[3] >> 8) & 0xFF);
+//
+//	state[12] = state[12]^(rdkey[0] & 0xFF);
+//	state[13] = state[13]^(rdkey[1] & 0xFF);
+//	state[14] = state[14]^(rdkey[2] & 0xFF);
+//	state[15] = state[15]^(rdkey[3] & 0xFF);
+//}
+//
+//void subBytes(unsigned char * state) {
+//	int i;
+//	for (i = 0; i < 16; i++) {
+//		subByte(state + i);
+//	}
+//}
+//
+//void shiftRows(unsigned char * state) {
+//	// Left shift one
+//	char temp = state[4];
+//	state[4] = state[5];
+//	state[5] = state[6];
+//	state[6] = state[7];
+//	state[7] = temp;
+//
+//	// Two swaps
+//	temp = state[8];
+//	state[8] = state[10];
+//	state[10] = temp;
+//	temp = state[9];
+//	state[9] = state[11];
+//	state[11] = temp;
+//
+//	//Right shift one
+//	temp = state[15];
+//	state[15] = state[14];
+//	state[14] = state[13];
+//	state[13] = state[12];
+//	state[12] = temp;
+//}
+//
+//// Perform AES Encryption in Software
+//void encrypt(unsigned char * plaintext_asc, unsigned char * key_asc, unsigned long * state, unsigned long * key)
+//{
+//	unsigned long rdkey[44]; // 11 round keys in 4x 32bit format
+//	unsigned char key_tmp[16]; // store key as an array of unsigned characters
+//	unsigned char state_tmp[16]; // store state as an array of unsigned characters
+//
+//	/*Initialize state/key arrays to the initial plaintext and key*/
+//	int row, col, i;
+//	for (row = 0; row < 4; row++) {
+//		for (col = 0; col < 4; col++) {
+//			i = col+row*4;
+//			key_tmp[col+row*4] = charsToHex(key_asc[2*i], key_asc[2*i+1]);
+//			state_tmp[row+col*4] = charsToHex(plaintext_asc[2*i], plaintext_asc[2*i+1]);
+//		}
+//	}
+//
+//	for(i = 0; i < 4; i++)
+//		key[i] = ((key_tmp[4*i] << 24) | (key_tmp[4*i+1] << 16) | (key_tmp[4*i+2] << 8) | key_tmp[4*i+3]);
+//
+//	AES_PTR[0] = key[0];
+//	AES_PTR[1] = key[1];
+//	AES_PTR[2] = key[2];
+//	AES_PTR[3] = key[3];
+//
+//	/* Key expand */
+//	keyExpansion(key_tmp, rdkey);
+////	printf("%08x %08x\n", rdkey[0], rdkey[1]);
+////	printf("%08x %08x\n", rdkey[2], rdkey[3]);
+//	/* Call first AddRoundKey*/
+//	addRoundKey(state_tmp, rdkey);
+//	/* Next 9 complete rounds */
+//	int round;
+//
+//	for (round = 1; round < 10; round++) {
+//		subBytes(state_tmp);
+//		shiftRows(state_tmp);
+//		mixColumns(state_tmp);
+//		addRoundKey(state_tmp, rdkey + 4*round);
+////		printf("%08x %08x\n", (rdkey+4*round)[0], (rdkey+4*round)[1]);
+////		printf("%08x %08x\n", (rdkey+4*round)[2], (rdkey+4*round)[3]);
+//	}
+//	/* Final round is incomplete */
+//	subBytes(state_tmp);
+//	shiftRows(state_tmp);
+//	addRoundKey(state_tmp, rdkey + 40);
+////	printf("%08x %08x\n", rdkey[40], rdkey[41]);
+////		printf("%08x %08x\n", rdkey[42], rdkey[43]);
+//
+//	/* Convert state_tmp into state and return */
+//	for(i = 0; i < 4; i++)
+//		state[i] = ((state_tmp[4*i] << 24) | (state_tmp[4*i+1] << 16) | (state_tmp[4*i+2] << 8) | state_tmp[4*i+3]);
+//}
+//
+//// Perform AES Decryption in Hardware
+//void decrypt(unsigned long * state, unsigned long * key)
+//{
+//	AES_PTR[0] = key[0];
+//	AES_PTR[1] = key[1];
+//	AES_PTR[2] = key[2];
+//	AES_PTR[3] = key[3];
+//
+//		//debug
+//		printf("\key[i]is: \n");
+//					for(int i = 0; i < 4; i++){
+//						printf("%08x\n", key[i]);
+//					}
+//		//debug
+//
+//	AES_PTR[4] = state[0];
+//	AES_PTR[5] = state[1];
+//	AES_PTR[6] = state[2];
+//	AES_PTR[7] = state[3];
+//
+//	AES_PTR[14] = 1;
+//
+//	while(AES_PTR[15] == 0) {} // Do nothing
+//
+//	state[3] = AES_PTR[8];
+//	state[2] = AES_PTR[9];
+//	state[1] = AES_PTR[10];
+//	state[0] = AES_PTR[11];
+//
+//	AES_PTR[14] = 0;
+//}
+//
+//int main()
+//{
+//	// Input Message and Key as 32x 8bit ASCII Characters ([33] is for NULL terminator)
+//	unsigned char plaintext_asc[33];
+//	unsigned char key_asc[33];
+//	// Key and Encrypted Message in 4x 32bit Format
+//	unsigned long state[4];
+//	unsigned long key[4];
+//
+//	printf("Select execution mode: 0 for testing, 1 for benchmarking: ");
+//	scanf("%d", &run_mode);
+//
+//	if (run_mode == 0) {
+//		while (1) {
+//			int i = 0;
+//			printf("\nEnter plain text:\n");
+//			scanf("%s", plaintext_asc);
+//			printf("\n");
+//			printf("\nEnter key:\n");
+//			scanf("%s", key_asc);
+//			printf("\n");
+//			encrypt(plaintext_asc, key_asc, state, key);
+//			printf("\nEncrpted message is: \n");
+//			for(i = 0; i < 4; i++){
+//				printf("%08lX\n", state[i]);
+//			}
+//			decrypt(state, key);
+//			printf("\nDecrypted message is: \n");
+//			for(i = 0; i < 4; i++){
+//				printf("%08lX\n", state[i]);
+//			}
+//		}
+//	}
+//	else {
+//		int i = 0;
+//		int size_KB = 1;
+//		for (i = 0; i < 32; i++) {
+//			plaintext_asc[i] = 'a';
+//			key_asc[i] = 'b';
+//		}
+//
+//		clock_t begin = clock();
+//		for (i = 0; i < size_KB * 128; i++)
+//			encrypt(plaintext_asc, key_asc, state, key);
+//		clock_t end = clock();
+//		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+//		double speed = size_KB / time_spent;
+//
+//		printf("Software Encryption Speed: %f KB/s \n", speed);
+//
+//		begin = clock();
+//		for (i = 0; i < size_KB * 128; i++)
+//			decrypt(state, key);
+//		end = clock();
+//		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+//		speed = size_KB / time_spent;
+//
+//		printf("Hardware Encryption Speed: %f KB/s \n", speed);
+//	}
+//	return 0;
+//}
+
+
+
+
+
+
+
+
+

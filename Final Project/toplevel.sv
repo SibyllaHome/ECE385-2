@@ -45,6 +45,11 @@ module final_project_top_level(
 	 logic [1:0] hpi_addr;
     logic [15:0] hpi_data_in, hpi_data_out;
     logic hpi_r, hpi_w, hpi_cs, hpi_reset;
+	 logic [9:0] POS_X, POS_Y;
+	 logic active;   // high during active pixel drawing
+	 
+	 logic [VRAM_A_WIDTH-1:0] address;
+	 logic [VRAM_D_WIDTH-1:0] dataout;
 	 
 	 // EZ-OTG
     hpi_io_intf hpi_io_inst(
@@ -90,6 +95,54 @@ module final_project_top_level(
                              .otg_hpi_w_export(hpi_w),
                              .otg_hpi_reset_export(hpi_reset)
     );
-    
-										 
+	 
+	 // VGA_CONTROLLER
+	 VGA_controller vga_controller_instance(.*,
+														 .Reset(Reset_h),
+														 .DrawX(POS_X),
+														 .DrawY(POS_Y));
+	 
+	 // SRAM
+	 sram #(
+        .ADDR_WIDTH(VRAM_A_WIDTH), 
+        .DATA_WIDTH(VRAM_D_WIDTH), 
+        .DEPTH(VRAM_DEPTH), 
+        .MEMFILE("game.mem"))  // bitmap to load
+        vram (
+        .i_addr(address), 
+        .i_clk(CLK), 
+        .i_write(0),  // we're always reading
+        .i_data(0), 
+        .o_data(dataout)
+    );
+	 
+	 // VRAM frame buffers
+    localparam SCREEN_WIDTH = 640;
+    localparam SCREEN_HEIGHT = 480;
+    localparam VRAM_DEPTH = SCREEN_WIDTH * SCREEN_HEIGHT; 
+    localparam VRAM_A_WIDTH = 19;  // 2^19 > 640 x 480
+    localparam VRAM_D_WIDTH = 6;   // colour bits per pixel
+	 
+	 // load palatte
+	 reg [11:0] palette [0:63];  // 64 x 12-bit colour palette entries
+    reg [11:0] colour;
+    initial begin
+        $display("Loading palette.");
+        $readmemh("game_palette.mem", palette);  // bitmap palette to load
+    end
+	 
+	 always @ (posedge CLK)
+    begin
+        address <= y * SCREEN_WIDTH + x;
+
+        if (active)
+            colour <= palette[dataout];
+        else    
+            colour <= 0;
+
+        VGA_R <= colour[11:8];
+        VGA_G <= colour[7:4];
+        VGA_B <= colour[3:0];
+    end
+	 
 endmodule

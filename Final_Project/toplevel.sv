@@ -1,4 +1,4 @@
-module final_project_top_level(
+module toplevel(
 										 input					CLOCK_50,
 										 input[3:0]				KEY,
 										 output logic[6:0]	HEX0, HEX1,
@@ -42,10 +42,28 @@ module final_project_top_level(
         Reset_h <= ~(KEY[0]);        // The push buttons are active low
     end
 	 
+	 
+	 // generate VGA_CLK
+	 always_ff @ (posedge Clk) begin
+		if(Reset_h) begin
+			VGA_CLK <= 1'b0;
+		end else begin
+			VGA_CLK <= ~VGA_CLK;
+		end
+	 end
+
+	 
+	 // USB HPI ///////////////////////////
 	 logic [1:0] hpi_addr;
     logic [15:0] hpi_data_in, hpi_data_out;
     logic hpi_r, hpi_w, hpi_cs, hpi_reset;
+	 //////////////////////////////////////
+	 
+	 // pixel position
 	 logic [9:0] POS_X, POS_Y;
+	 
+	 //
+	 logic [3:0] pixel;
 	 
 	 //for VGA CONTROLLER
 	 logic active;   // high during active pixel drawing
@@ -104,52 +122,73 @@ module final_project_top_level(
 	 VGA_controller vga_controller_instance(.*,
 														 .Reset(Reset_h),
 														 .DrawX(POS_X),
-														 .DrawY(POS_Y)
+														 .DrawY(POS_Y),
+														 //new stuff belows
 														 .o_active(active),
 														 .o_screenend(screenend),
 														 .o_animate(animate));
+														 
+	 // Color Mapper
+	 color_mapper(.pixel_val(pixel),
+					  .drawX(POS_X),
+					  .drawY(POS_Y),
+					  .clk(Clk),
+//					  .finished_frogs(4'b0001),
+					  .VGA_R(VGA_R),
+					  .VGA_G(VGA_G),
+					  .VGA_B(VGA_B)
+					  );
+					  
+//	 // ram.sv instantiate
+//	 testRam testMan(.read_addr(addr),
+//						  .clk(Clk),
+//						  .data_out(pixel));
+//	
+//	 logic [18:0] addr;
+//	 assign addr = POS_Y * 640 + POS_X;
+			
+//	 // SRAM
+//	 sram #(
+//        .ADDR_WIDTH(VRAM_A_WIDTH), 
+//        .DATA_WIDTH(VRAM_D_WIDTH), 
+//        .DEPTH(VRAM_DEPTH), 
+//        .MEMFILE("game.mem"))  // bitmap to load
+//        vram (
+//        .i_addr(address), 
+//        .i_clk(CLK), 
+//        .i_write(0),  // we're always reading
+//        .i_data(0), 
+//        .o_data(dataout)
+//    );
 	 
-	 // SRAM
-	 sram #(
-        .ADDR_WIDTH(VRAM_A_WIDTH), 
-        .DATA_WIDTH(VRAM_D_WIDTH), 
-        .DEPTH(VRAM_DEPTH), 
-        .MEMFILE("game.mem"))  // bitmap to load
-        vram (
-        .i_addr(address), 
-        .i_clk(CLK), 
-        .i_write(0),  // we're always reading
-        .i_data(0), 
-        .o_data(dataout)
-    );
-	 
-	 // VRAM frame buffers
+//	 // VRAM frame buffers
     localparam SCREEN_WIDTH = 640;
     localparam SCREEN_HEIGHT = 480;
     localparam VRAM_DEPTH = SCREEN_WIDTH * SCREEN_HEIGHT; 
     localparam VRAM_A_WIDTH = 19;  // 2^19 > 640 x 480
     localparam VRAM_D_WIDTH = 6;   // colour bits per pixel
 	 
-	 // load palatte
-	 reg [11:0] palette [0:63];  // 64 x 12-bit colour palette entries
-    reg [11:0] colour;
-    initial begin
-        $display("Loading palette.");
-        $readmemh("game_palette.mem", palette);  // bitmap palette to load
-    end
-	 
-	 always @ (posedge CLK)
-    begin
-        address <= y * SCREEN_WIDTH + x;
-
-        if (active)
-            colour <= palette[dataout];
-        else    
-            colour <= 0;
-
-        VGA_R <= colour[11:8];
-        VGA_G <= colour[7:4];
-        VGA_B <= colour[3:0];
-    end
-	 
+//	 // load palatte
+//	 reg [11:0] palette [0:63];  // 64 x 12-bit colour palette entries
+//    reg [11:0] colour;
+//    initial begin
+//endmodule
+//
+//        $display("Loading palette.");
+//        $readmemh("game_palette.mem", palette);  // bitmap palette to load
+//    end
+//	 
+//	 always_ff @ (posedge CLK)
+//    begin
+//        address <= POS_Y * SCREEN_WIDTH + POS_X;
+//
+//        if (active)
+//            colour <= palette[dataout];
+//        else    
+//            colour <= 0;
+//
+//        VGA_R <= colour[11:8];
+//        VGA_G <= colour[7:4];
+//        VGA_B <= colour[3:0];
+//    end
 endmodule

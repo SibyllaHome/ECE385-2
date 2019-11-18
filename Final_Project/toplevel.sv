@@ -2,6 +2,8 @@ module toplevel(
 										 input					CLOCK_50,
 										 input[3:0]				KEY,
 										 output logic[6:0]	HEX0, HEX1,
+										 // PS/2 INPUT
+										 input logic 			PS2_CLK, PS2_DAT,
 										 // VGA
 										 output logic [7:0]  VGA_R,        //VGA Red
 																	VGA_G,        //VGA Green
@@ -34,7 +36,7 @@ module toplevel(
 										 );
 										 
 	 logic Reset_h, Clk;
-    logic [7:0] keycode;
+    logic [7:0] keycode; // used for NIOS, not PS/2
     
     assign Clk = CLOCK_50;
 	 
@@ -63,7 +65,7 @@ module toplevel(
 	 logic [9:0] POS_X, POS_Y;
 	 
 	 //
-	 logic [3:0] pixel;
+	 logic [4:0] pixel;
 	 
 	 //for VGA CONTROLLER
 	 logic active;   // high during active pixel drawing
@@ -93,6 +95,37 @@ module toplevel(
                             .OTG_CS_N(OTG_CS_N),
                             .OTG_RST_N(OTG_RST_N)
     );
+	 
+	 // signals for keyboard
+	 logic [7:0] keyCode;	// used for PS/2
+	 logic		 isPress;
+	 // keyboard (PS/2)
+	 keyboard PS2(
+					  .Clk(Clk),
+					  .psClk(PS2_CLK),
+					  .psData(PS2_DAT),
+					  .reset(Reset_h),
+					  .keyCode(keyCode),
+					  .press(isPress));
+	 
+	 // test keyboard
+	 logic A;
+	 logic B;
+	 always_comb begin
+	 A = 1'b0;
+	 B = 1'b0;
+	 if(keyCode == 8'h04) begin
+		A = 1'b1;
+		B = 1'b0;
+	 end
+	 else if(keyCode == 8'h05)begin
+		A = 1'b0;
+		B = 1'b1;
+	 end
+	 end
+	 
+	 HexDriver hex0(A, HEX0);
+	 HexDriver hex1(B, HEX1);
 	 
 	 // NIOS II
 	 final_project nios_system(
@@ -128,16 +161,24 @@ module toplevel(
 														 .o_screenend(screenend),
 														 .o_animate(animate));
 														 
+	 
+														 
 	 // Color Mapper
-	 color_mapper(.pixel_val(pixel),
-					  .drawX(POS_X),
-					  .drawY(POS_Y),
-					  .clk(Clk),
-//					  .finished_frogs(4'b0001),
-					  .VGA_R(VGA_R),
-					  .VGA_G(VGA_G),
-					  .VGA_B(VGA_B)
-					  );
+	 color_mapper color_mapper(.pixel_val(pixel),
+										.drawX(POS_X),
+										.drawY(POS_Y),
+										.clk(Clk),
+//					  					.finished_frogs(4'b0001),
+										.VGA_R(VGA_R),
+										.VGA_G(VGA_G),
+										.VGA_B(VGA_B)
+										);
+					  
+	 // player 1
+	 stickman player1(.drawX(POS_X),
+							.drawY(POS_Y),
+							.clk(Clk),
+							.pixel_val(pixel));
 					  
 //	 // ram.sv instantiate
 //	 testRam testMan(.read_addr(addr),

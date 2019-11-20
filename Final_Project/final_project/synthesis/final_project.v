@@ -6,7 +6,8 @@
 module final_project (
 		input  wire        clk_clk,                //             clk.clk
 		input  wire [3:0]  key_wire_export,        //        key_wire.export
-		output wire [7:0]  keycode_export,         //         keycode.export
+		output wire [31:0] keycode_export,         //         keycode.export
+		output wire [15:0] keycode2_export,        //        keycode2.export
 		output wire [1:0]  otg_hpi_address_export, // otg_hpi_address.export
 		output wire        otg_hpi_cs_export,      //      otg_hpi_cs.export
 		input  wire [15:0] otg_hpi_data_in_port,   //    otg_hpi_data.in_port
@@ -115,9 +116,14 @@ module final_project (
 	wire   [1:0] mm_interconnect_0_otg_hpi_data_s1_address;                   // mm_interconnect_0:otg_hpi_data_s1_address -> otg_hpi_data:address
 	wire         mm_interconnect_0_otg_hpi_data_s1_write;                     // mm_interconnect_0:otg_hpi_data_s1_write -> otg_hpi_data:write_n
 	wire  [31:0] mm_interconnect_0_otg_hpi_data_s1_writedata;                 // mm_interconnect_0:otg_hpi_data_s1_writedata -> otg_hpi_data:writedata
+	wire         mm_interconnect_0_keycode2_s1_chipselect;                    // mm_interconnect_0:keycode2_s1_chipselect -> keycode2:chipselect
+	wire  [31:0] mm_interconnect_0_keycode2_s1_readdata;                      // keycode2:readdata -> mm_interconnect_0:keycode2_s1_readdata
+	wire   [1:0] mm_interconnect_0_keycode2_s1_address;                       // mm_interconnect_0:keycode2_s1_address -> keycode2:address
+	wire         mm_interconnect_0_keycode2_s1_write;                         // mm_interconnect_0:keycode2_s1_write -> keycode2:write_n
+	wire  [31:0] mm_interconnect_0_keycode2_s1_writedata;                     // mm_interconnect_0:keycode2_s1_writedata -> keycode2:writedata
 	wire         irq_mapper_receiver0_irq;                                    // jtag_uart_0:av_irq -> irq_mapper:receiver0_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                        // irq_mapper:sender_irq -> nios2_gen2_0:irq
-	wire         rst_controller_reset_out_reset;                              // rst_controller:reset_out -> [irq_mapper:reset, jtag_uart_0:rst_n, key:reset_n, keycode:reset_n, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_memory2_0:reset, otg_hpi_address:reset_n, otg_hpi_cs:reset_n, otg_hpi_data:reset_n, otg_hpi_r:reset_n, otg_hpi_reset:reset_n, otg_hpi_w:reset_n, rst_translator:in_reset, sdram_pll:reset, sysid_qsys_0:reset_n]
+	wire         rst_controller_reset_out_reset;                              // rst_controller:reset_out -> [irq_mapper:reset, jtag_uart_0:rst_n, key:reset_n, keycode2:reset_n, keycode:reset_n, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_memory2_0:reset, otg_hpi_address:reset_n, otg_hpi_cs:reset_n, otg_hpi_data:reset_n, otg_hpi_r:reset_n, otg_hpi_reset:reset_n, otg_hpi_w:reset_n, rst_translator:in_reset, sdram_pll:reset, sysid_qsys_0:reset_n]
 	wire         rst_controller_reset_out_reset_req;                          // rst_controller:reset_req -> [nios2_gen2_0:reset_req, onchip_memory2_0:reset_req, rst_translator:reset_req_in]
 	wire         rst_controller_001_reset_out_reset;                          // rst_controller_001:reset_out -> [mm_interconnect_0:sdram_reset_reset_bridge_in_reset_reset, sdram:reset_n]
 
@@ -151,6 +157,17 @@ module final_project (
 		.chipselect (mm_interconnect_0_keycode_s1_chipselect), //                    .chipselect
 		.readdata   (mm_interconnect_0_keycode_s1_readdata),   //                    .readdata
 		.out_port   (keycode_export)                           // external_connection.export
+	);
+
+	final_project_keycode2 keycode2 (
+		.clk        (clk_clk),                                  //                 clk.clk
+		.reset_n    (~rst_controller_reset_out_reset),          //               reset.reset_n
+		.address    (mm_interconnect_0_keycode2_s1_address),    //                  s1.address
+		.write_n    (~mm_interconnect_0_keycode2_s1_write),     //                    .write_n
+		.writedata  (mm_interconnect_0_keycode2_s1_writedata),  //                    .writedata
+		.chipselect (mm_interconnect_0_keycode2_s1_chipselect), //                    .chipselect
+		.readdata   (mm_interconnect_0_keycode2_s1_readdata),   //                    .readdata
+		.out_port   (keycode2_export)                           // external_connection.export
 	);
 
 	final_project_nios2_gen2_0 nios2_gen2_0 (
@@ -348,6 +365,11 @@ module final_project (
 		.keycode_s1_readdata                            (mm_interconnect_0_keycode_s1_readdata),                       //                                         .readdata
 		.keycode_s1_writedata                           (mm_interconnect_0_keycode_s1_writedata),                      //                                         .writedata
 		.keycode_s1_chipselect                          (mm_interconnect_0_keycode_s1_chipselect),                     //                                         .chipselect
+		.keycode2_s1_address                            (mm_interconnect_0_keycode2_s1_address),                       //                              keycode2_s1.address
+		.keycode2_s1_write                              (mm_interconnect_0_keycode2_s1_write),                         //                                         .write
+		.keycode2_s1_readdata                           (mm_interconnect_0_keycode2_s1_readdata),                      //                                         .readdata
+		.keycode2_s1_writedata                          (mm_interconnect_0_keycode2_s1_writedata),                     //                                         .writedata
+		.keycode2_s1_chipselect                         (mm_interconnect_0_keycode2_s1_chipselect),                    //                                         .chipselect
 		.nios2_gen2_0_debug_mem_slave_address           (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_address),      //             nios2_gen2_0_debug_mem_slave.address
 		.nios2_gen2_0_debug_mem_slave_write             (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write),        //                                         .write
 		.nios2_gen2_0_debug_mem_slave_read              (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_read),         //                                         .read

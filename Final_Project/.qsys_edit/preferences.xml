@@ -7,6 +7,7 @@
    <irq preferredWidth="34" />
   </columns>
  </systemtable>
- <library expandedCategories="Project,Library" />
- <window width="1100" height="800" x="62" y="0" />
+ <library
+   expandedCategories="Library/DSP/Video and Image Processing,Library/University Program,Project,Library/Processors and Peripherals,Library/Processors and Peripherals/Hard Processor Components,Library/Processors and Peripherals/Hard Processor Systems,Library/University Program/Generic IO,Library/DSP,Library" />
+ <window width="1064" height="1080" x="794" y="0" />
 </preferences>

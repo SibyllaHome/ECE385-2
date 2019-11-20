@@ -8,7 +8,8 @@
 //-------------------------------------------------------------------------
 module keyboard(input logic Clk, psClk, psData, reset,
 					 output logic [7:0] keyCode,
-					 output logic press);
+					 output logic press,
+					 output logic [15:0] test_out);
 
 
 	logic Q1, Q2, en, enable, shiftout1, shiftout2, Press;
@@ -90,6 +91,7 @@ module keyboard(input logic Clk, psClk, psData, reset,
 				Data = Byte_2[9:2];
 				Press = 1'b1;
 				Typematic_Keycode = Data;
+				test_out = {Byte_2[9:2], Byte_1[9:2]};
 			end
 		end
 	end

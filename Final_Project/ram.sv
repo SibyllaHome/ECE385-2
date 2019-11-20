@@ -79,3 +79,24 @@ begin
 end
 
 endmodule
+
+
+
+module player_jump(
+						 input [11:0] read_addr,
+						 input clk,
+						 output logic [7:0] data_out
+						 );
+
+logic [7:0] mem [0:3199];
+initial begin
+	$readmemh("player_jump.txt",mem);
+end
+	
+always_ff @ (posedge clk)
+begin
+	data_out <= mem[read_addr];
+end	
+						 
+endmodule
+

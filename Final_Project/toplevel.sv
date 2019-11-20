@@ -36,7 +36,11 @@ module toplevel(
 										 );
 										 
 	 logic Reset_h, Clk;
-    logic [7:0] keycode; // used for NIOS, not PS/2
+    logic [31:0] keycode; // used for NIOS, not PS/2
+	 logic [15:0] keycode2;
+	 logic [47:0] full_keycode;
+	 logic jump1,jump2,walk1,walk2;
+	 assign full_keycode = {keycode, keycode2};
     
     assign Clk = CLOCK_50;
 	 
@@ -64,8 +68,10 @@ module toplevel(
 	 // pixel position
 	 logic [9:0] POS_X, POS_Y;
 	 
-	 //
-	 logic [4:0] pixel;
+	 //stickman
+	 logic [4:0] pixel,pixel_player1,pixel_player2;
+	 logic [9:0] x_begin,y_begin;
+	 logic [9:0] x_begin2,y_begin2;
 	 
 	 //for VGA CONTROLLER
 	 logic active;   // high during active pixel drawing
@@ -97,35 +103,35 @@ module toplevel(
     );
 	 
 	 // signals for keyboard
-	 logic [7:0] keyCode;	// used for PS/2
-	 logic		 isPress;
+//	 logic [7:0] keyCode;	// used for PS/2
+//	 logic		 isPress;
 	 // keyboard (PS/2)
-	 keyboard PS2(
-					  .Clk(Clk),
-					  .psClk(PS2_CLK),
-					  .psData(PS2_DAT),
-					  .reset(Reset_h),
-					  .keyCode(keyCode),
-					  .press(isPress));
+//	 keyboard PS2(
+//					  .Clk(Clk),
+//					  .psClk(PS2_CLK),
+//					  .psData(PS2_DAT),
+//					  .reset(Reset_h),
+//					  .keyCode(keyCode),
+//					  .press(isPress));
 	 
 	 // test keyboard
-	 logic A;
-	 logic B;
-	 always_comb begin
-	 A = 1'b0;
-	 B = 1'b0;
-	 if(keyCode == 8'h04) begin
-		A = 1'b1;
-		B = 1'b0;
-	 end
-	 else if(keyCode == 8'h05)begin
-		A = 1'b0;
-		B = 1'b1;
-	 end
-	 end
-	 
-	 HexDriver hex0(A, HEX0);
-	 HexDriver hex1(B, HEX1);
+//	 logic A;
+//	 logic B;
+//	 always_comb begin
+//	 A = 1'b0;
+//	 B = 1'b0;
+//	 if(keyCode == 8'h04) begin
+//		A = 1'b1;
+//		B = 1'b0;
+//	 end
+//	 else if(keyCode == 8'h05)begin
+//		A = 1'b0;
+//		B = 1'b1;
+//	 end
+//	 end
+//	 
+//	 HexDriver hex0(A, HEX0);
+//	 HexDriver hex1(B, HEX1);
 	 
 	 // NIOS II
 	 final_project nios_system(
@@ -141,7 +147,8 @@ module toplevel(
                              .sdram_wire_ras_n(DRAM_RAS_N),
                              .sdram_wire_we_n(DRAM_WE_N), 
                              .sdram_clk_clk(DRAM_CLK),
-                             .keycode_export(keycode),  
+                             .keycode_export(keycode),
+									  .keycode2_export(keycode2),  
                              .otg_hpi_address_export(hpi_addr),
                              .otg_hpi_data_in_port(hpi_data_in),
                              .otg_hpi_data_out_port(hpi_data_out),
@@ -178,7 +185,43 @@ module toplevel(
 	 stickman player1(.drawX(POS_X),
 							.drawY(POS_Y),
 							.clk(Clk),
-							.pixel_val(pixel));
+							.*,
+							.jump(jump1),
+							.walk(walk1),
+							.pixel_val(pixel_player1));
+							
+	 stickman player2(.drawX(POS_X),
+							.drawY(POS_Y),
+							.clk(Clk),
+							.x_begin(x_begin2),
+							.y_begin(y_begin2),
+							.jump(jump2),
+							.walk(walk2),
+							.pixel_val(pixel_player2));
+	 always_comb begin
+		if (pixel_player1 == 5'd0)
+			pixel = pixel_player2;
+		else 
+			pixel = pixel_player1;
+	 end
+		
+							
+	 moving_player1 Mplayer1(.clk(Clk),
+									 .Reset(Reset_h),
+									 .frame_clk(VGA_VS),
+									 .keycode(full_keycode),
+									 .*,
+									 .jump_out(jump1),
+									 .walk_out(walk1)
+									);
+	 moving_player2 Mplayer2(.clk(Clk),
+									 .Reset(Reset_h),
+									 .frame_clk(VGA_VS),
+									 .keycode(full_keycode),
+									 .x_begin(x_begin2),
+									 .y_begin(y_begin2),
+									 .jump_out(jump2),
+									 .walk_out(walk2));
 					  
 //	 // ram.sv instantiate
 //	 testRam testMan(.read_addr(addr),
